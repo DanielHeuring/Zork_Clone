@@ -27,6 +27,7 @@ east = []
 west = []
 
 exitDoor = ["open door", "exit", "exit room"]
+jumpOutWindow = ["jump out", "jump out window", "exit window"]
 
 location = 1
 prevLocation = 0
@@ -34,17 +35,18 @@ prevLocation = 0
 print("---------------------------------------------------------")
 print("Welcome to Bulldog Brawl")
 
+first = ""
+
 while True:
     if location == 0:
         break
     #DORM = 1
     while location == 1:
-        first = "blank"
         if first == ("open window"):
             print("---------------------------------------------------------")
             gprint("You see the campus and feel the breeze off Lake Superior.")
             first = uinput("")
-        elif first == ("jump out") or ("jump out window") or ("exit window"):
+        elif first in jumpOutWindow:
             print("---------------------------------------------------------")
             gprint("You fall to your death. What were you thinking?")
             location = 0
