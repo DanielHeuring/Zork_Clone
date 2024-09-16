@@ -6,7 +6,7 @@ def gprint(string):
     string = string + "\n"
     for i in string:
         print(i, end='', flush = True)
-        sleep(0.001)
+        sleep(0.02)
 
 #Use function [uinput("string")] to take user input for correct terminal organization and ">" at cursor
 #NEED TO ADD > IN FRONT OF CURSOR
@@ -63,3 +63,6 @@ while True:
             else:
                 gprint("DORM\nBrad is still watching TV. There is a window, a door, and a desk.")
                 first = uinput("")
+
+    while location == 2:
+        pass
