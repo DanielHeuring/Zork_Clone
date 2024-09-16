@@ -1,1 +1,10 @@
 Can we use multiple files? I think the gprint and uinput should have their own files. 
+
+
+l = look
+i = inventory 
+
+
+
+Read this for a list of commands and other info:
+https://zork.fandom.com/wiki/Command_List
