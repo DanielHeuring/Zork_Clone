@@ -5,7 +5,7 @@ def gprint(string):
     string = string + "\n"
     for i in string:
         print(i, end='', flush=True)
-        sleep(0.02) # 0.02 for game
+        sleep(0.001) # 0.02 for game
 
 def gprintcustom(string, speed):
     string = string + "\n"
@@ -53,16 +53,16 @@ locations = {
     1: {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
         "description": "DORM\nBrad is still watching TV. There is a window, a door, and a desk.",
-        "exits": {"door": 2},
+        "exits": {"door": 2, "exit": 2, "open door": 2, "exit door": 2, "east": 2, "e": 2, "go east": 2},
         "actions": {
             "open window": "You see the campus and feel the breeze off Lake Superior.",
             "jump out window": "You fall to your death. What were you thinking?"
         }
     },
     2: {
-        "initialDescription": "***",
-        "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
-        "exits": {"north": 3, "west": 1},
+        "initialDescription": "You've made your way to the main dorm hallway. If you look north, you see a sign for the LSH office. Your dorm is West to your back. To the south is a couple parking lots for students. You didn't bother bringing your car up this semester, but are sure you won't need it.",
+        "description": "DORM HALLWAY\nYou can see LSH, your dorm, and the parking lots.",
+        "exits": {"north": 3, "west": 1, "south": 4},
         "actions": {}
     },
     3: {
@@ -70,6 +70,12 @@ locations = {
         "description": "You are in front of the LSH office. The door is slightly open.",
         "exits": {"south": 2},
         "actions": {"open door": "The door is locked."}
+    },
+    4: {
+        "initialDescription": "***",
+        "description": "",
+        "exits": {"north": 2},
+        "actions": {"***"}
     }
 }
 
