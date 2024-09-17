@@ -6,7 +6,7 @@ def gprint(string):
     string = string + "\n"
     for i in string:
         print(i, end='', flush = True)
-        sleep(0.02)
+        sleep(0.001) #0.02 for real game
 
 #Use function [uinput("string")] to take user input for correct terminal organization and ">" at cursor
 #NEED TO ADD > IN FRONT OF CURSOR
@@ -15,9 +15,20 @@ def uinput(string):
     output = (input(string)).lower().strip()
     return str(output)
 
+location = 1
+prevLocation = 0
+
 def changeLocation(newLocation):
+    global prevLocation, location
     prevLocation = location
-    location = newLocation
+    location = int(newLocation)
+
+def displayBackpack():
+    gprint("\nBackpack:\n-------------")
+    print(*backpack, sep= "\n")
+    print("\n")
+
+backpack = ["laptop", "notebook", "myUcard"]
 
 place_list = []
 #COMMON INPUTS
@@ -28,21 +39,23 @@ west = []
 
 exitDoor = ["open door", "exit", "exit room"]
 jumpOutWindow = ["jump out", "jump out window", "exit window"]
-
-location = 1
-prevLocation = 0
+backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
 
 print("---------------------------------------------------------")
 print("Welcome to Bulldog Brawl")
 
 first = ""
+second = ""
 
 while True:
     if location == 0:
         break
     #DORM = 1
     while location == 1:
-        if first == ("open window"):
+        if first in backpackNames:
+            displayBackpack()
+            first = ""
+        elif first == ("open window"):
             print("---------------------------------------------------------")
             gprint("You see the campus and feel the breeze off Lake Superior.")
             first = uinput("")
@@ -54,6 +67,10 @@ while True:
             print("---------------------------------------------------------")
             gprint("YOU GO TO HALLWAY ***")
             changeLocation(2)
+        elif first != "":
+            print("---------------------------------------------------------")
+            gprint("I don't know " + first)
+            first = ""
         elif location == 1:
             print("---------------------------------------------------------")
             if 1 not in place_list:
@@ -64,5 +81,36 @@ while True:
                 gprint("DORM\nBrad is still watching TV. There is a window, a door, and a desk.")
                 first = uinput("")
 
+    #DORM HALLWAY = 2
     while location == 2:
-        pass
+        if second in backpackNames:
+            displayBackpack()
+            second = ""
+        elif second ==("***"):
+            print("---------------------------------------------------------")
+            gprint("***")
+            second = uinput("")
+        elif second ==("***"):
+            print("---------------------------------------------------------")
+            gprint("***")
+            second = uinput("")
+        elif second ==("***"):
+            print("---------------------------------------------------------")
+            gprint("***")
+            second = uinput("")
+        elif second ==("***"):
+            print("---------------------------------------------------------")
+            gprint("***")
+            second = uinput("")
+        elif second != "":
+            print("---------------------------------------------------------")
+            gprint("I don't know " + second)
+            second = ""
+        elif location == 2:
+            if 1 not in place_list:
+                gprint("***")
+                second = uinput("")
+                place_list.append(1)
+            else:
+                gprint("DORM HALLWAY\n***")
+                first = uinput("")
