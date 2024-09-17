@@ -55,6 +55,7 @@ south = ["south", "s", "go south", "head south"]
 east = ["east", "e", "go east", "head east"]
 west = ["west", "w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
+
 exit_aliases = {"north": north,
                 "south": south,
                 "east": east,
@@ -62,11 +63,11 @@ exit_aliases = {"north": north,
                 "door": exitDoor}
 
 # Action Lists
+backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
 jumpOutWindow = ["jump out", "jump out window", "exit window"]
+
 action_aliases = {"jump out window": jumpOutWindow,
                  "backpack": backpackNames}
-
-backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
 
 discoveredLocations = []
 
@@ -79,7 +80,7 @@ locations = {
         "actions": {
             "open window": "You see the campus and feel the breeze off Lake Superior.",
             "jump out window": "You fall to your death. What were you thinking?",
-            "backpack": "**BACKPACK COMPONENTS**"}
+            "backpack": "**BACKPACK COMPONENTS**"
         }
     },
     "dormhall": {
