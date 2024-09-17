@@ -49,7 +49,7 @@ isTerminated = False
 backpack = ["laptop", "notebook", "myUcard"]
 place_list = []
 
-# Common Inputs
+# Exit Lists
 north = ["north", "n", "go north", "head north"]
 south = ["south", "s", "go south", "head south"]
 east = ["east", "e", "go east", "head east"]
@@ -61,8 +61,10 @@ exit_aliases = {"north": north,
                 "west": west,
                 "door": exitDoor}
 
+# Action Lists
 jumpOutWindow = ["jump out", "jump out window", "exit window"]
-action_aliases = {"jump out window": jumpOutWindow}
+action_aliases = {"jump out window": jumpOutWindow,
+                 "backpack": backpackNames}
 
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
 
@@ -76,20 +78,22 @@ locations = {
         "exits": {"door": "dormhall"},
         "actions": {
             "open window": "You see the campus and feel the breeze off Lake Superior.",
-            "jump out window": "You fall to your death. What were you thinking?"
+            "jump out window": "You fall to your death. What were you thinking?",
+            "backpack": "**BACKPACK COMPONENTS**"}
         }
     },
     "dormhall": {
         "initialDescription": "***",
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
         "exits": {"north": "LSHdesk", "west": "dorm"},
-        "actions": {}
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "LSHdesk": {
         "initialDescription": "***",
         "description": "You are in front of the LSH office",
         "exits": {"south": "dormhall"},
-        "actions": {"open door": "The door is locked."}
+        "actions": {"open door": "The door is locked.",
+                   "backpack": "**BACKPACK COMPONENTS**"}
     }
 }
 
