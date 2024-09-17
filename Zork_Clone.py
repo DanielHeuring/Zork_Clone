@@ -15,9 +15,6 @@ def uinput(string):
     output = (input(string)).lower().strip()
     return str(output)
 
-location = 1
-prevLocation = 0
-
 def changeLocation(newLocation):
     global prevLocation, location
     prevLocation = location
@@ -28,18 +25,26 @@ def displayBackpack():
     print(*backpack, sep= "\n")
     print("\n")
 
+#Globals
+#-----------------------------------------------------------
+
+location = 1
+prevLocation = 0
+
 backpack = ["laptop", "notebook", "myUcard"]
 
 place_list = []
 #COMMON INPUTS
 north = ["north", "n", "go north", "head north"]
-south = []
-east = []
-west = []
+south = ["south", "s", "go south", "head south"]
+east = ["east", "e", "go east", "head east"]
+west = ["west", "w", "go west", "head west"]
 
 exitDoor = ["open door", "exit", "exit room"]
 jumpOutWindow = ["jump out", "jump out window", "exit window"]
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
+
+#-----------------------------------------------------------
 
 print("---------------------------------------------------------")
 print("Welcome to Bulldog Brawl")
@@ -65,7 +70,6 @@ while True:
             location = 0
         elif first in exitDoor:
             print("---------------------------------------------------------")
-            gprint("YOU GO TO HALLWAY ***")
             changeLocation(2)
         elif first != "":
             print("---------------------------------------------------------")
@@ -86,10 +90,9 @@ while True:
         if second in backpackNames:
             displayBackpack()
             second = ""
-        elif second ==("***"):
+        elif second in north:
             print("---------------------------------------------------------")
-            gprint("***")
-            second = uinput("")
+            changeLocation(3)
         elif second ==("***"):
             print("---------------------------------------------------------")
             gprint("***")
@@ -108,9 +111,12 @@ while True:
             second = ""
         elif location == 2:
             if 1 not in place_list:
-                gprint("***")
+                gprint("You've made your way to the main dorm hallway. If you look north, you see a sign for the LSH office. Your dorm is West to your back. To the south is a couple parking lots for students. You didn't bother bringing your car up this semester, but are sure you won't need it. ")
                 second = uinput("")
                 place_list.append(1)
             else:
-                gprint("DORM HALLWAY\n***")
+                gprint("DORM HALLWAY\nYou can see LSH, your dorm, and the parking lots")
                 first = uinput("")
+    while location == 3:
+        print("LSH")
+    #LSH Office - 3
