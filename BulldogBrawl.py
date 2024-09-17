@@ -87,7 +87,7 @@ locations = {
     },
     "LSHdesk": {
         "initialDescription": "***",
-        "description": "You are in front of the LSH office. The door is slightly open.",
+        "description": "You are in front of the LSH office",
         "exits": {"south": "dormhall"},
         "actions": {"open door": "The door is locked."}
     }
