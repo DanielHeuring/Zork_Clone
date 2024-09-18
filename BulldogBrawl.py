@@ -1,11 +1,12 @@
 import time
 from time import sleep
 
+
 def gprint(string):
     string = string + "\n"
     for i in string:
         print(i, end='', flush=True)
-        sleep(0.001) # 0.02 for game
+        sleep(0.02) # 0.02 for game
 
 def gprintcustom(string, speed):
     string = string + "\n"
@@ -21,61 +22,79 @@ def uinput(string):
 def changeLocation(newLocation):
     global prevLocation, location
     prevLocation = location
-    location = int(newLocation)
+    location = newLocation
 
 def displayBackpack():
     gprint("\nBackpack:\n-------------")
     print(*backpack, sep= "\n")
     print("\n")
 
+def get_exit(user_input):
+    for action, aliases in exit_aliases.items():
+        if user_input in aliases:
+            return action
+    return None
+
+def get_action(user_input):
+    for action, aliases in action_aliases.items():
+        if user_input in aliases:
+            return action
+    return None
+
 # Globals
-location = 1
+location = "dorm"
 prevLocation = 0
 isTerminated = False
 
 backpack = ["laptop", "notebook", "myUcard"]
 place_list = []
 
-# Common Inputs
+# Exit Lists
 north = ["north", "n", "go north", "head north"]
 south = ["south", "s", "go south", "head south"]
 east = ["east", "e", "go east", "head east"]
 west = ["west", "w", "go west", "head west"]
-
 exitDoor = ["open door", "exit", "exit room"]
-jumpOutWindow = ["jump out", "jump out window", "exit window"]
+
+exit_aliases = {"north": north,
+                "south": south,
+                "east": east,
+                "west": west,
+                "door": exitDoor}
+
+# Action Lists
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
+jumpOutWindow = ["jump out", "jump out window", "exit window"]
+
+action_aliases = {"jump out window": jumpOutWindow,
+                 "backpack": backpackNames}
 
 discoveredLocations = []
 
 # Locations
 locations = {
-    1: {
+    "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
         "description": "DORM\nBrad is still watching TV. There is a window, a door, and a desk.",
-        "exits": {"door": 2, "exit": 2, "open door": 2, "exit door": 2, "east": 2, "e": 2, "go east": 2},
+        "exits": {"door": "dormhall"},
         "actions": {
             "open window": "You see the campus and feel the breeze off Lake Superior.",
-            "jump out window": "You fall to your death. What were you thinking?"
+            "jump out window": "You fall to your death. What were you thinking?",
+            "backpack": "**BACKPACK COMPONENTS**"
         }
     },
-    2: {
-        "initialDescription": "You've made your way to the main dorm hallway. If you look north, you see a sign for the LSH office. Your dorm is West to your back. To the south is a couple parking lots for students. You didn't bother bringing your car up this semester, but are sure you won't need it.",
-        "description": "DORM HALLWAY\nYou can see LSH, your dorm, and the parking lots.",
-        "exits": {"north": 3, "west": 1, "south": 4},
-        "actions": {}
-    },
-    3: {
+    "dormhall": {
         "initialDescription": "***",
-        "description": "You are in front of the LSH office.",
-        "exits": {"south": 2},
-        "actions": {""}
+        "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
+        "exits": {"north": "LSHdesk", "west": "dorm"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-    4: {
+    "LSHdesk": {
         "initialDescription": "***",
-        "description": "",
-        "exits": {"north": 2},
-        "actions": {"***"}
+        "description": "You are in front of the LSH office",
+        "exits": {"south": "dormhall"},
+        "actions": {"open door": "The door is locked.",
+                   "backpack": "**BACKPACK COMPONENTS**"}
     }
 }
 
@@ -91,12 +110,14 @@ def handle_location(location):
         discoveredLocations.append(location)
 
     # Handle exits (moving to another location)
-    if user_input in locations[location]["exits"]:
-        new_location = locations[location]["exits"][user_input]
+    exit = get_exit(user_input)
+    action = get_action(user_input)
+    if exit in locations[location]["exits"]:
+        new_location = locations[location]["exits"][exit]
         changeLocation(new_location)
     # Handle actions within the current location
-    elif user_input in locations[location]["actions"]:
-        gprint(locations[location]["actions"][user_input])
+    elif action in locations[location]["actions"]:
+        gprint(locations[location]["actions"][action])
     # Ends the program at any point
     elif user_input == "terminate":
         global isTerminated
@@ -112,5 +133,3 @@ while True:
         gprintcustom("TERMINATING...\n\n\n", 0.1)
         break
     handle_location(location)
-
-    
