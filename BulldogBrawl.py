@@ -1,7 +1,6 @@
 import time
 from time import sleep
 
-
 def gprint(string):
     string = string + "\n"
     for i in string:
@@ -41,6 +40,11 @@ def get_action(user_input):
             return action
     return None
 
+def displayBackpack():
+    gprint("\nBackpack:\n-------------")
+    print(*backpack, sep= "\n")
+    print("\n")
+
 # Globals
 location = "dorm"
 prevLocation = 0
@@ -60,14 +64,17 @@ exit_aliases = {"north": north,
                 "south": south,
                 "east": east,
                 "west": west,
-                "door": exitDoor}
+                "door": exitDoor
+                }
 
 # Action Lists
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
-jumpOutWindow = ["jump out", "jump out window", "exit window"]
+jumpOutWindow = ["jump out", "jump out window", "exit window", "jump"]
+openWindow = ["open", "open window", "window"]
 
 action_aliases = {"jump out window": jumpOutWindow,
-                 "backpack": backpackNames}
+                 "backpack": backpackNames,
+                 "open window": openWindow}
 
 discoveredLocations = []
 
@@ -84,13 +91,13 @@ locations = {
         }
     },
     "dormhall": {
-        "initialDescription": "***",
+        "initialDescription": "**DORM HALLWAY**",
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
         "exits": {"north": "LSHdesk", "west": "dorm"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "LSHdesk": {
-        "initialDescription": "***",
+        "initialDescription": "**LSH OFFICE**",
         "description": "You are in front of the LSH office",
         "exits": {"south": "dormhall"},
         "actions": {"open door": "The door is locked.",
