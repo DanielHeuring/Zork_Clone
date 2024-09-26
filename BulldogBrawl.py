@@ -1,18 +1,104 @@
-import time
+import operator
+import turtle
 from time import sleep
+from typing import List
 
+class Hall:
+    def __init__(
+        self,
+        name: str = None,
+        init_des: str = None,
+        exits: List[str] = None,
+        actions: str = None,
+        elements: str = None,
+        visited: bool = False,
+        #shape: turtle
+    ):
+        self.name = name
+        self.init_des = init_des
+        self.exits = exits
+        self.visited = visited
+        if actions is None:
+            self.actions = []
+        else:
+            self.actions = actions
+        if elements is None:
+            self.elements = []
+        else:
+            self.elements = []
 
+       # self.shape = shape
+
+    #def draw(self):
+        #however you should draw it in turtle
+
+    def visit_hall(self):
+        if not self.visited:
+            self.visited = True
+            gprint(self.init_des)
+            # TODO - display the init_des
+            
+
+        # TODO - ?? is there anything else to display here
+
+    def inspect_hall(self):
+        # TODO - display specific info you want when inspecting the hall
+        pass
+
+location = 0        
+
+halls = [
+    # Dorm Room
+    Hall(
+        name = "Dorm Room",
+        init_des= "You are standing in your room.",
+        exits = {
+            "door": "Dorm Hall",
+            "Window" : "You fall to your death"
+        },
+        actions= [
+            "Open the window",
+            "Grab set of Keys"
+        ]
+    ),
+    Hall(
+        name = "Dorm Hall",
+        init_des= "Standing outside of your room you see the LSH desk to the north",
+        exits= [
+            "Dorm Room",
+            "LSH Desk"
+        ]
+    ),
+    Hall(
+        name= "LSH Desk",
+        init_des= "You are standing outside the LSH desk but nobody is there",
+        exits= [
+            "Dorm Hall"
+        ]
+    )
+]
+# Exits
+north = ["north", "n", "go north", "head north"]
+south = ["south", "s", "go south", "head south"]
+east = ["east", "e", "go east", "head east"]
+west = ["west", "w", "go west", "head west"]
+exitDoor = ["open door", "exit", "exit room"]
+
+exit_aliases = {"north": north,
+                "south": south,
+                "east": east,
+                "west": west,
+                "door": exitDoor}
+
+# Globals
+prevLocation = 0
+
+# Funtions
 def gprint(string):
     string = string + "\n"
     for i in string:
         print(i, end='', flush=True)
         sleep(0.02) # 0.02 for game
-
-def gprintcustom(string, speed):
-    string = string + "\n"
-    for i in string:
-        print(i, end='', flush=True)
-        sleep(speed)
 
 def uinput(string):
     print("\n")
@@ -24,107 +110,34 @@ def changeLocation(newLocation):
     prevLocation = location
     location = newLocation
 
-def displayBackpack():
-    gprint("\nBackpack:\n-------------")
-    print(*backpack, sep= "\n")
-    print("\n")
-
 def get_exit(user_input):
     for action, aliases in exit_aliases.items():
         if user_input in aliases:
             return action
     return None
 
-def get_action(user_input):
-    for action, aliases in action_aliases.items():
-        if user_input in aliases:
-            return action
-    return None
+# Function finding what hall we want in array
+def find_hall(new_hall_name):
+    for hall_index in range(len(halls)):
+        if halls[hall_index].name == new_hall_name:
+            return hall_index
+    pass
 
-# Globals
-location = "dorm"
-prevLocation = 0
-isTerminated = False
 
-backpack = ["laptop", "notebook", "myUcard"]
-place_list = []
-
-# Common Inputs
-north = ["north", "n", "go north", "head north"]
-south = ["south", "s", "go south", "head south"]
-east = ["east", "e", "go east", "head east"]
-west = ["west", "w", "go west", "head west"]
-exitDoor = ["open door", "exit", "exit room"]
-exit_aliases = {"north": north,
-                "south": south,
-                "east": east,
-                "west": west,
-                "door": exitDoor}
-
-jumpOutWindow = ["jump out", "jump out window", "exit window"]
-action_aliases = {"jump out window": jumpOutWindow}
-
-backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
-
-discoveredLocations = []
-
-# Locations
-locations = {
-    "dorm": {
-        "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
-        "description": "DORM\nBrad is still watching TV. There is a window, a door, and a desk.",
-        "exits": {"door": "dormhall"},
-        "actions": {
-            "open window": "You see the campus and feel the breeze off Lake Superior.",
-            "jump out window": "You fall to your death. What were you thinking?"
-        }
-    },
-    "dormhall": {
-        "initialDescription": "***",
-        "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
-        "exits": {"north": "LSHdesk", "west": "dorm"},
-        "actions": {}
-    },
-    "LSHdesk": {
-        "initialDescription": "***",
-        "description": "You are in front of the LSH office. The door is slightly open.",
-        "exits": {"south": "dormhall"},
-        "actions": {"open door": "The door is locked."}
-    }
-}
-
-# Function to handle location transitions and actions
+# Location Handling
 def handle_location(location):
-    print("---------------------------------------------------------")
-    if location in discoveredLocations:
-        gprint(locations[location]["description"])
-        user_input = uinput(">")
-    else:
-        gprint(locations[location]["initialDescription"])
-        user_input = uinput(">")
-        discoveredLocations.append(location)
+    print("-------------------------")
+    halls[location].visit_hall()
+    user_input = uinput(">")
+    exit_take = get_exit(user_input)
+    if exit_take in (halls[location].exits):
+        # this gets us the name of the room to go to
+        new_location_name = halls[location].exits[exit_take]
+        # convert that room name into an index in the halls array
+        new_location = find_hall(new_location_name)
+        changeLocation(new_location)   
 
-    # Handle exits (moving to another location)
-    exit = get_exit(user_input)
-    action = get_action(user_input)
-    if exit in locations[location]["exits"]:
-        new_location = locations[location]["exits"][exit]
-        changeLocation(new_location)
-    # Handle actions within the current location
-    elif action in locations[location]["actions"]:
-        gprint(locations[location]["actions"][action])
-    # Ends the program at any point
-    elif user_input == "terminate":
-        global isTerminated
-        isTerminated = True
-    else:
-        gprint("I don't know how to " + user_input)
 
 # Main Game Loop
 while True:
-    if location == 0:
-        break
-    elif isTerminated == True:
-        gprintcustom("TERMINATING...\n\n\n", 0.1)
-        break
     handle_location(location)
