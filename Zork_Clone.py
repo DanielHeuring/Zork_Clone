@@ -43,6 +43,7 @@ west = ["west", "w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
 jumpOutWindow = ["jump out", "jump out window", "exit window"]
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
+lookOutWindow = ["look out window", "open window"]
 
 #-----------------------------------------------------------
 
@@ -60,14 +61,14 @@ while True:
         if first in backpackNames:
             displayBackpack()
             first = ""
-        elif first == ("open window"):
-            print("---------------------------------------------------------")
-            gprint("You see the campus and feel the breeze off Lake Superior.")
-            first = uinput("")
         elif first in jumpOutWindow:
             print("---------------------------------------------------------")
             gprint("You fall to your death. What were you thinking?")
             location = 0
+        elif first in lookOutWindow:
+            print("---------------------------------------------------------")
+            gprint("You see the campus and feel the breeze off Lake Superior.")
+            first = uinput("")
         elif first in exitDoor:
             print("---------------------------------------------------------")
             changeLocation(2)
