@@ -1,3 +1,4 @@
+#this is not finished, I will update later - Caleb
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
