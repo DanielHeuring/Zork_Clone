@@ -357,8 +357,8 @@ def create_room(roomID):
     turtle.done()
     turtle.exitonclick()
 
-create_room("dorm")
-create_room("dormhall")
-create_room("LSHdesk")
-create_room("kirby1")
-create_room("heller1")
+
+roomid = input("What room would you like to generate? ")
+
+create_room(roomid)
+
