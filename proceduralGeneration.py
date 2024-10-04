@@ -286,12 +286,16 @@ def create_room(roomID):
         pass
 
     # Displays Room Name
-    t.teleport(-240, 275)
+    t.penup()
+    t.setpos(-240,275)
+    t.pendown()
     t.write(f"{roomID}", False, "left", font=("Monospace", 14, 'normal'))
 
     # GENERATES "REGULAR" ROOMS
     if type == "reg_room":
-        t.teleport(250, 250)
+        t.penup()
+        t.setpos(250,250)
+        t.pendown()
         t.right(90)
         t.forward(200)
         if exit_east == True:
