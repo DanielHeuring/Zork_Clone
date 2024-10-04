@@ -328,7 +328,9 @@ def create_room(roomID):
 
     # GENERATES HALLS
     elif type == "hall":
-        t.teleport(50, 50)
+        t.penup()
+        t.setpos(50,50)
+        t.pendown()
         if exit_east == True:
             turtle_halls()
         else:
