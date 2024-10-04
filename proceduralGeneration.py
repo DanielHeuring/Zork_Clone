@@ -190,7 +190,7 @@ locations = {
         "exits": {"north": "chemistry3", "east": "chemistrylab4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-    "soloncc": {
+    "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
         "type": "reg_room",
