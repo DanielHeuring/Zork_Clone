@@ -1,4 +1,3 @@
-#this is not finished, I will update later - Caleb
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
@@ -155,7 +154,7 @@ locations = {
         "exits": {"north": "chemistry3", "east": "chemistrylab4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-    "soloncc": {
+    "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
         "exits": {"north": "cinahallgr", "east": "darlandadmin"},
