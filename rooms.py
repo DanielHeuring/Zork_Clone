@@ -490,4 +490,4 @@ locations = {
         "exits": {"gamble": "Play roulette", "leave": "in_the_house"},
         "actions": {}
     }
-}
+} 
