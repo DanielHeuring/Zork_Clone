@@ -145,12 +145,16 @@ def find_hall(new_hall_name):
     pass
 
 # Items
+# This function prints the keys description
 def key():
     gprint("There is a key on your desk")
+# This function prints the key cards description
 def key_card():
     gprint("There is a key card laying on the floor")
+# This function prints the balls description
 def ball():
     gprint("There is ball laying on the ground outside of the desk")
+# Dictionary using location as key and function as value
 item_dic = {
     "Dorm Room": key,
     "Dorm Hall": key_card,
@@ -162,7 +166,7 @@ def handle_location(location):
     print("-------------------------")
 
     halls[location].visit_hall()
-
+# if hall has key compare location to item call function
     if halls[location].items:
         hall_index = halls[location].name
         item = item_dic[hall_index]
