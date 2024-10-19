@@ -3,11 +3,11 @@ import random
 def blackJack():
     global wins, buck_Health, player_Health, stay
     print("""
-You here rattles coming from the dark corner of his office. All of the sudden
+You hear rattles coming from the dark corner of his office. All of a sudden
 a dark figure emerges. You scream out in terror. "AHhhhhh" You realize it was 
-Dr. Buck and are a little embaressed that you screamed. He questions you on
+Dr. Buck and you are a little embarrassed that you screamed. He questions you on
 what you are doing in his office until he notices the answer key in your hand.
-You attempt to run but the door slams shut and you cannot pry in open. You turn
+You attempt to run but the door slams shut and you cannot pry it open. You turn
 around and Dr. Buck has a deck of cards on his deck and asks if you want to play.
 He wants to play a version of blackjack where the difference in value damages your health. 
     """)
@@ -97,7 +97,7 @@ He wants to play a version of blackjack where the difference in value damages yo
         print("""
 You have defeated Dr. Buck in a game of blackjack. He 
 looks at you with dread and allows you to leave the room
-answer key in hand. You succesfully pass the final exam 
+answer key in hand. You successfully pass the final exam 
 and are able to move on with your college journey.
               """)
     elif player_Health<=0:
