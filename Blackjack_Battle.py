@@ -1,5 +1,6 @@
+#Austin, Caleb, Dalton, Daniel
 import random
-#Function that will be imported to game
+#Function that will be imported to the game
 def blackJack():
     global wins, buck_Health, player_Health, stay #Ensures that all of the variables will work in loops 
     #"monster" Description
