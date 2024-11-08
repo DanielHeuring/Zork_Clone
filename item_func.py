@@ -18,6 +18,7 @@ class Hall:
         self.exits = exits
         self.visited = visited
         self.items = items
+        self.inspected = False
         self.actions = actions if actions else []
 
        
@@ -146,16 +147,12 @@ def find_hall(new_hall_name):
     pass
 
 # Items
-# This function prints the keys description
 def key():
-    gprint("There is a key on your desk")
-# This function prints the key cards description
+    return "a key on your desk"
 def key_card():
-    gprint("There is a key card laying on the floor")
-# This function prints the balls description
+    return "a key card laying on the floor"
 def ball():
-    gprint("There is ball laying on the ground outside of the desk")
-# Dictionary using location as key and function as value
+    return "There is ball laying on the ground outside of the desk"
 item_dic = {
     "Dorm Room": key,
     "Dorm Hall": key_card,
@@ -167,23 +164,31 @@ def handle_location(location):
     print("-------------------------")
 
     halls[location].visit_hall()
-# if hall has key compare location to item call function
-    if halls[location].items:
-        hall_index = halls[location].name
-        item = item_dic[hall_index]
-        if callable(item):
-            item()
-        
+    
     user_input = uinput("> ")
     exit_take = get_exit(user_input)
     action_take = get_action(user_input)
 
-    if "grab" in user_input or "pick up" in user_input:
+    if "inspect" in user_input:
         if halls[location].items:
-            gprint(f"You picked up the {item}")
-            backpack.append(item)
-            halls[location].items = False
-
+            hall_index = halls[location].name
+            item = item_dic[hall_index]
+            if callable(item):
+                item_desc = item()
+                gprint(f"There is {item_desc}")
+        halls[location].inspected = True
+    
+    elif "grab" in user_input or "pick up" in user_input:
+        if halls[location].items and halls[location].inspected:
+            hall_index = halls[location].name
+            item = item_dic[hall_index]
+            if callable(item):
+                item_desc = item()
+                backpack.append(item)
+                gprint(f"You picked up the {item_desc}")
+                halls[location].items = False
+        elif halls[location].inspected == False:
+            gprint("You have not inspected the room")
         else:
             gprint("There is nothing to pick up here")
 
@@ -194,6 +199,9 @@ def handle_location(location):
 
     elif action_take in (halls[location].actions):
         pass
+
+    elif "backpack" in user_input:
+        print(backpack)
             
     else:
         gprint("I don't know how to " + user_input)
