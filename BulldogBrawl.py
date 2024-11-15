@@ -1,84 +1,30 @@
 from time import sleep
 from typing import List
+from rooms import locations
 
 class Hall:
-    def __init__(
-        self,
-        name: str = None,
-        init_des: str = None,
-        desc: str = None,
-        exits: List[str] = None,
-        actions: str = None,
-        visited: bool = False,
-        items: bool = False
-        ):
-        self.name = name
-        self.init_des = init_des
-        self.desc = desc
-        self.exits = exits
-        self.visited = visited
-        self.items = items
-        self.actions = actions if actions else []
+    def __init__(self, data):
+        self.init_des = data.get("initialDescription", "")
+        self.desc = data.get("description", "")
+        self.exits = data.get("exits", {})
+        self.actions = data.get("actions", {})
+        self.visited = False
 
-       
     def visit_hall(self):
         if not self.visited:
             self.visited = True
-            gprint(self.init_des)
-            # TODO - display the init_des
+            print(location)
+            gprint(self.desc)
         else:
+            print(location)
             gprint(self.desc)
 
     def inspect_hall(self):
        gprint(f"You inspect {self.name}. You see: {','.join(self.items) if self.items  else 'nothing special'}")
 
-# Array containing locations
-location = 0        
-halls = [
-    # Dorm Room
-    Hall(
-        name = "Dorm Room",
-        init_des= "You are standing in your room.",
-        desc = "Brad is still watching TV",
-        exits = {
-            "door": "Dorm Hall",
-            "window" : ""
-        },
-        actions= {
-            "Open the window": "",
-            "items": ""
-        },
-        items= True
-    ),
-    Hall(
-        name = "Dorm Hall",
-        init_des= "Standing outside of your room you see the LSH desk to the north",
-        desc = "You are in the dorm hall",
-        exits= {
-            "east": "Dorm Room",
-            "north": "LSH Desk"
-        },
-        items= True
-    ),
-    Hall(
-        name= "LSH Desk",
-        init_des= "You are standing outside the LSH desk but nobody is there",
-        desc = "There's a light on at the desk but nobody is there",
-        exits= {
-            "south": "Dorm Hall",
-            "east": "Dining Center"
-        },
-        items= True
-    ),
-    Hall(
-        name= "Dining Center",
-        init_des= "Standing in front of the glass doors you find a smell assulting your nose",
-        desc = "The assulting smell is still there.",
-        exits= {
-            "west": "LSH Desk"
-        }
-    )
-]
+# Initialize Halls with location Dict
+halls = {key: Hall(data) for key, data in locations.items()}
+
 # Exits
 north = ["north", "n", "go north", "head north"]
 south = ["south", "s", "go south", "head south"]
@@ -86,13 +32,17 @@ east = ["east", "e", "go east", "head east"]
 west = ["west", "w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
 exitWindow = ["window", "jump out"]
+up_stairs = ["u", "go up", "up stairs", "go up stairs", "up"]
+down_stairs = ["d", "go down", "down stairs", "go down stairs", "down"]
 
 exit_aliases = {"north": north,
                 "south": south,
                 "east": east,
                 "west": west,
                 "door": exitDoor,
-                "window": exitWindow}
+                "window": exitWindow,
+                "up": up_stairs,
+                "down": down_stairs}
 
 # Action Lists
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
@@ -104,27 +54,27 @@ action_aliases = {"jump out window": jumpOutWindow,
                  "open window": openWindow
                  }
 
-
 # Globals
+location = "dorm"
 prevLocation = 0
 backpack = []
 
-# Funtions
+#Functions
 def gprint(string):
     string = string + "\n"
     for i in string:
         print(i, end='', flush=True)
-        sleep(0.02) # 0.02 for game
+        sleep(0.0001) # 0.02 for game
 
 def uinput(string):
     print("\n")
     output = (input(string)).lower().strip()
     return str(output)
 
-def changeLocation(newLocation):
+def changeLocation(new_location):
     global prevLocation, location
     prevLocation = location
-    location = newLocation
+    location = new_location
 
 def get_exit(user_input):
     for exit, aliases in exit_aliases.items():
@@ -138,65 +88,34 @@ def get_action(user_input):
             return action
     return None
 
-# Function finding what hall we want in array
-def find_hall(new_hall_name):
-    for hall_index in range(len(halls)):
-        if halls[hall_index].name == new_hall_name:
-            return hall_index
-    pass
+def invalid_input(user_input, exit_take, action_take):
+    if exit_take in exit_aliases:
+        gprint("That is not a valid direction here")
+    elif action_take in action_aliases:
+        gprint("That is not a valid action here")
+    else:
+        gprint("I don't know how to " + user_input)
 
-# Items
-# This function prints the keys description
-def key():
-    gprint("There is a key on your desk")
-# This function prints the key cards description
-def key_card():
-    gprint("There is a key card laying on the floor")
-# This function prints the balls description
-def ball():
-    gprint("There is ball laying on the ground outside of the desk")
-# Dictionary using location as key and function as value
-item_dic = {
-    "Dorm Room": key,
-    "Dorm Hall": key_card,
-    "LSH Desk": ball
-}
+# Main Game Handler
+def handle_location(location_name):
+    print("--------------------")
 
-# Main Game Handling
-def handle_location(location):
-    print("-------------------------")
+    current_hall = halls[location_name]
+    current_hall.visit_hall()
 
-    halls[location].visit_hall()
-# if hall has key compare location to item call function
-    if halls[location].items:
-        hall_index = halls[location].name
-        item = item_dic[hall_index]
-        if callable(item):
-            item()
-        
     user_input = uinput("> ")
     exit_take = get_exit(user_input)
     action_take = get_action(user_input)
 
-    if "grab" in user_input or "pick up" in user_input:
-        if halls[location].items:
-            gprint(f"You picked up the {item}")
-            backpack.append(item)
-            halls[location].items = False
-
-        else:
-            gprint("There is nothing to pick up here")
-
-    elif exit_take in (halls[location].exits):
-        new_location_name = halls[location].exits[exit_take]
-        new_location = find_hall(new_location_name)
+    if exit_take in current_hall.exits:
+        new_location = current_hall.exits[exit_take]
         changeLocation(new_location)   
 
-    elif action_take in (halls[location].actions):
+    elif action_take in current_hall.actions:
         pass
             
     else:
-        gprint("I don't know how to " + user_input)
+        invalid_input(user_input, exit_take, action_take)
 
 # Main Game Loop
 while True:
