@@ -12,7 +12,7 @@ locations = {
     "dormhall": {
         "initialDescription": "***",
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
-        "exits": {"north": "LSHdesk", "west": "dorm", "south": "offcampus"},
+        "exits": {"north": "LSHdesk", "east": "dorm", "south": "offcampus"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "LSHdesk": {
@@ -31,247 +31,289 @@ locations = {
     "kirby3": {
         "initialDescription": "***",
         "description": "You are at the top of a large and busy stairwell. To your north and south are two sets of doors.",
-        "exits": {"north": "rafters", "south": "kirbyballroom", "west": "diningcenter"},
+        "exits": {"north": "rafters", "south": "kirbyballroom", "west": "diningcenter", "down": "kirby2"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "rafters": {
+        "initialDescription": "***",
+        "description": "You enter a bare white room with some tables",
+        "exits": {"south": "kirby3"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "kirbyBall": {
+        "intialDescription": "***",
+        "description": "Large room with pillars and wooden floor",
+        "exits": {"north": "kirby3", "south": ""},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "kirby2": {
         "initialDescription": "***",
         "description": "You are halfway down the stairs. To the south is the Office of Diversity and Inclusion. To the north, you spot the school store and a food court.",
-        "exits": {"north": "foodcourt", "south": "kirbyplaza2", "west": "kirby3"},
+        "exits": {"north": "kirbyplaza2", "south": "", "up": "kirby3", "down": "kirby1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "kirby1": {
         "initialDescription": "***",
         "description": "You are at the bottom of a large stairwell. You see hallways leading in all directions.",
-        "exits": {"north": "kirbyplaza1", "south": "heller1", "west": "kirby2", "east": "cinahall"},
+        "exits": {"north": "kirbyplaza1", "south": "heller1", "up": "kirby2", "east": "cinahall1", "down": "soloncc"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "kirbyplaza1": {
+        "initialDescription": "***",
+        "description": "-----",
+        "exits": {"south": "kirby1", "north": "outsidekathrynalib", "west": "labovitzfl1", "up": "kirbyplaza2"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+     "kirbyplaza2": {
+        "initialDescription": "***",
+        "description": "-----",
+        "exits": {"down": "kirbyplaza1", "south": "kirby2", "north": "foodcourt", "up": "kirbyplaza3"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+     "kirbyplaza3": {
+        "initialDescription": "***",
+        "description": "-----",
+        "exits": {"down": "kirbyplaza2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "heller1": {
         "initialDescription": "***",
         "description": "The hallway continues to run north-south. There is a stairwell that takes you to the second floor of Heller Hall.",
-        "exits": {"north": "kirby1", "south": "lifescience1", "west": "heller2"},
+        "exits": {"north": "kirby1", "south": "lifescience1", "up": "heller2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "heller2": {
         "initialDescription": "***",
         "description": "This hallway is of no interest to you.",
-        "exits": {"north": "heller1", "south": "heller3"},
+        "exits": {"down": "heller1", "up": "heller3", "south": "lifescience2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "heller3": {
         "initialDescription": "***",
         "description": "You are on the top floor of Heller Hall. A door with chains and a vicious dog blocks your way.",
-        "exits": {"north": "heller2", "west": "thomasbuckoffice"},
+        "exits": {"down": "heller2", "west": "thomasbuckoffice", "south": "lifescience3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "lifescience1": {
         "initialDescription": "***",
         "description": "Life Science Floor 1 has large lecture halls. A hallway leads south and east.",
-        "exits": {"north": "heller1", "south": "MWAH1", "east": "chemistry2"},
+        "exits": {"north": "heller1", "south": "MWAH1", "east": "chemistry2", "up": "lifescience2", "down": "lifesciencegr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "lifesciencegr": {
         "initialDescription": "***",
         "description": "Some classrooms and offices. You faintly remember traveling to the observatory as a kid.",
-        "exits": {"north": "lifescience1", "south": "MWAHgr"},
+        "exits": {"up": "lifescience1", "south": "MWAHgr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "lifescience2": {
         "initialDescription": "***",
         "description": "This hallway looks like every other one on campus.",
-        "exits": {"north": "heller2", "south": "lifescience1"},
+        "exits": {"north": "heller2", "down": "lifescience1", "up": "lifescience3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "lifescience3": {
         "initialDescription": "***",
         "description": "The top floor of the Life Science building. A hallway breaks north and a skyway is to the west.",
-        "exits": {"north": "heller3", "west": "swensonscience1"},
+        "exits": {"north": "heller3", "west": "swensonscience1", "down": "lifescience2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "MWAH1": {
         "initialDescription": "***",
         "description": "You are at the farthest south point on campus. A hall heads north and east.",
-        "exits": {"north": "lifescience1", "east": "schoolofmedicine1"},
+        "exits": {"north": "lifescience1", "east": "schoolofmedicine1", "up": "MWAH2", "down": "MWAHgr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "MWAHgr": {
         "initialDescription": "***",
         "description": "You are on the ground floor of Marshall W. Alworth Hall. There is a set of stairs and a circular building you're unsure about.",
-        "exits": {"north": "MWAH1", "south": "planetarium"},
+        "exits": {"up": "MWAH1", "south": "planetarium", "north": "lifesciencegr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "MWAH2": {
         "initialDescription": "***",
         "description": "Nothing seems to interest you on this floor.",
-        "exits": {"north": "MWAH1", "south": "MWAH3"},
+        "exits": {"down": "MWAH1", "up": "MWAH3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "MWAH3": {
         "initialDescription": "***",
         "description": "Nothing seems to interest you on this floor.",
-        "exits": {"north": "MWAH2", "south": "MWAH4"},
+        "exits": {"down": "MWAH2", "up": "MWAH4"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "MWAH4": {
+        "initialDescription": "***",
+        "description": "Nothing seems to interest you on this floor",
+        "exits": {"down": "MWAH3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "swensonsci1": {
         "initialDescription": "***",
         "description": "The Swenson building feels new and open, with large amounts of natural light. To the east is a skyway connecting to the Life Science building.",
-        "exits": {"east": "lifescience2", "south": "swensonscigr"},
+        "exits": {"east": "lifescience3", "down": "swensonscigr", "up": "swensonsci2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "swensonscigr": {
         "initialDescription": "***",
         "description": "You are on the ground floor of Swenson Science.",
-        "exits": {"north": "swensonsci1"},
+        "exits": {"up": "swensonsci1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "swensonsci2": {
         "initialDescription": "***",
         "description": "There are some labs and classrooms up here, but all the doors seem locked.",
-        "exits": {"north": "swensonsci1"},
+        "exits": {"down": "swensonsci1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "chemistry1": {
         "initialDescription": "***",
         "description": "A hallway runs north to south with locked doors to the south.",
-        "exits": {"north": "soloncc", "south": "chemistry2"},
+        "exits": {"north": "soloncc", "up": "chemistry2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "chemistry2": {
         "initialDescription": "***",
         "description": "The chemistry building appears very old and run down. A hallway takes you west to the Life Science building.",
-        "exits": {"west": "lifescience1", "north": "chemistry1", "south": "chemistry3"},
+        "exits": {"west": "lifescience1", "down": "chemistry1", "up": "chemistry3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "chemistry3": {
         "initialDescription": "***",
         "description": "There is some caution tape blocking the stairs on the way up.",
-        "exits": {"north": "chemistry2", "south": "chemistry4"},
+        "exits": {"down": "chemistry2", "up": "chemistry4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "chemistry4": {
         "initialDescription": "***",
         "description": "This floor feels abandoned, but you notice a light on in a lab.",
-        "exits": {"north": "chemistry3", "east": "chemistrylab4"},
+        "exits": {"down": "chemistry3", "east": "chemistrylab4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
-        "exits": {"north": "cinahallgr", "east": "darlandadmin"},
+        "exits": {"north": "cinahallgr", "east": "darlandadmin", "up": "kirby1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "darlandadmin": {
         "initialDescription": "***",
         "description": "The doors ahead are locked.",
-        "exits": {},
+        "exits": {"west": "soloncc"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahallgr": {
         "initialDescription": "***",
         "description": "This hallway feels darker than the rest. Doors advertise photography classes.",
-        "exits": {"north": "humanities2", "south": "soloncc"},
+        "exits": {"south": "soloncc", "up": "cinahall1", "north": "humanities2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahall1": {
         "initialDescription": "***",
         "description": "You have arrived at Cina Hall. The area is bright and lively.",
-        "exits": {"north": "humanities3", "west": "kirbyplaza1", "south": "cinahallgr"},
+        "exits": {"north": "humanities3", "west": "kirby1", "down": "cinahallgr", "up": "cinahall2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahall2": {
         "initialDescription": "***",
         "description": "This floor is very boring. A hall leads to Humanities, and stairs go up and down.",
-        "exits": {"north": "humanities4", "south": "cinahall1"},
+        "exits": {"north": "humanities4", "down": "cinahall1", "up": "cinahall3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahall3": {
         "initialDescription": "***",
         "description": "You have wandered to Cina Hall floor three, but there is nothing of interest here.",
-        "exits": {"north": "cinahall2"},
+        "exits": {"down": "cinahall2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities1": {
         "initialDescription": "***",
         "description": "Stretching eastward is a long hallway lined with locked music practice rooms. Vacant classrooms line the other side. There are no windows, and the hallway appears abandoned.",
-        "exits": {"east": "webermusic1", "south": "abanderson1", "stairs": "humanities2"},
+        "exits": {"east": "webermusic1", "south": "abanderson1", "up": "humanities2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities2": {
         "initialDescription": "***",
         "description": "The humanities hall is mostly comprised of music classrooms and offices. Hallways lead in all directions but west.",
-        "exits": {"north": "bohannongr", "west": "cinahallgr", "south": "abanderson2", "east": "webermusic2", "stairs": "humanities1"},
+        "exits": {"north": "bohannongr", "west": "cinahallgr", "south": "abanderson2", "east": "webermusic2", "down": "humanities1", "up": "down"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities3": {
         "initialDescription": "***",
         "description": "A long, bland hallway stretches out in front of you. Stairs lead up and down, with a hallway leading south.",
-        "exits": {"west": "cinahall1", "south": "abanderson3", "stairs": "humanities4"},
+        "exits": {"west": "cinahall1", "south": "abanderson3", "down": "humanities", "up": "humanities4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities4": {
         "initialDescription": "***",
         "description": "This building has more floors than expected. Stairs take you down to other humanities floors.",
-        "exits": {"west": "cinahall2", "south": "abanderson4", "stairs": "humanities3"},
+        "exits": {"west": "cinahall2", "south": "abanderson4", "down": "humanities3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "webermusic1": {
         "initialDescription": "***",
         "description": "You are on the bottom floor of Weber Music Hall. There is a closed ticket stand, and a dimly lit hallway heads west.",
-        "exits": {"west": "humanities1", "north": "rsopgr", "stairs": "webermusic2"},
+        "exits": {"west": "humanities1", "north": "rsopgr", "up": "webermusic2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "webermusic2": {
         "initialDescription": "***",
         "description": "Weber Music Hall's performance stage is locked. A hallway extends north past Romano Gym, with stairs descending to the first floor.",
-        "exits": {"north": "rsop1", "west": "humanities2", "stairs": "webermusic1"},
+        "exits": {"north": "rsop1", "west": "humanities2", "down": "webermusic1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannongr": {
         "initialDescription": "***",
         "description": "You notice Bohannon 90, a massive lecture hall. A hallway runs west to Ven Den and also runs north and south.",
-        "exits": {"south": "humanities2", "north": "montaguegr", "west": "venden"},
+        "exits": {"south": "humanities2", "north": "montaguegr", "west": "venden", "up": "bohannon2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon1": {
         "initialDescription": "***",
         "description": "This hall bores you. Go west to Kirby Plaza. Stairs take you to other Bohannon floors.",
-        "exits": {"west": "kirbyplaza1", "stairs": "bohannongr"},
+        "exits": {"west": "kirbyplaza1", "down": "bohannongr", "up": "bohannon2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon2": {
         "initialDescription": "***",
         "description": "The school seems to be full of classrooms, and western exits take you to Kirby Plaza.",
-        "exits": {"west": "kirbyplaza2", "stairs": "bohannon1"},
+        "exits": {"west": "kirbyplaza2", "down": "bohannon1", "up": "bohannon3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon3": {
         "initialDescription": "***",
         "description": "Another boring hallway. Go west to Kirby Plaza.",
-        "exits": {"west": "kirbyplaza3", "stairs": "bohannon2"},
+        "exits": {"west": "kirbyplaza3", "down": "bohannon2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "montaguegr": {
         "initialDescription": "***",
         "description": "Montague Hall's ground floor has large lecture halls. A hallway runs north and south.",
-        "exits": {"south": "bohannongr", "north": "edugr", "east": "marshallpac1"},
+        "exits": {"south": "bohannongr", "north": "edugr", "east": "marshallpac1", "up": "montague1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "montague1": {
         "initialDescription": "***",
         "description": "Lecture halls surround you, with stairs leading up and down.",
-        "exits": {"west": "kirbyplaza1", "stairs": "montaguegr"},
+        "exits": {"west": "kirbyplaza1", "down": "montaguegr", "up": "mantague2"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "montague2": {
+        "initialDescription": "***",
+        "description": "---",
+        "exits": {"down": "montague1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "edugr": {
         "initialDescription": "***",
         "description": "This open room has chairs that remind you of kindergarten. Classrooms line the walls.",
-        "exits": {"south": "montaguegr", "north": "engineering1", "stairs": "edu1"},
+        "exits": {"south": "montaguegr", "north": "engineering1", "up": "edu1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "edu1": {
         "initialDescription": "***",
         "description": "From the upper floor, you can see down to the ground floor. Rooms line the walls.",
-        "exits": {"west": "library1", "stairs": "edugr"},
+        "exits": {"west": "outsidekathrynalib", "down": "edugr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "engineering1": {
@@ -343,7 +385,7 @@ locations = {
     "outsidekathrynalib": {
         "initialDescription": "***",
         "description": "You are outside the entrance to the library. A unique staircase leads to the engineering building. To the south is Kirby Plaza.",
-        "exits": {"south": "kirbyplazafl1", "stairs": "engineeringfl1", "enter": "kathrynafl1"},
+        "exits": {"south": "kirbyplaza1", "stairs": "engineeringfl1", "enter": "kathrynafl1"},
         "actions": {}
     },
     "kathrynafl1": {
@@ -491,3 +533,4 @@ locations = {
         "actions": {}
     }
 } 
+
