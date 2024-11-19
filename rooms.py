@@ -13,7 +13,8 @@ locations = {
         "initialDescription": "***",
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
         "exits": {"north": "LSHdesk", "east": "dorm", "south": "offcampus"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"},
+        "items": {"ucard": {"name": "ucard", "description": "You see a Ucard laying face down on the floor"}}
     },
     "LSHdesk": {
         "initialDescription": "***",
@@ -26,7 +27,8 @@ locations = {
         "initialDescription": "***",
         "description": "You stop a moment to look inside the dining center. The food looks like it is suitable for a dog.",
         "exits": {"west": "LSHdesk", "east": "kirby3"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"},
+        "items": {"chicken wing": {"name": "chicken wing", "description": "Laying near the entrance you see a discarded chicken wing"}}
     },
     "kirby3": {
         "initialDescription": "***",
@@ -115,7 +117,7 @@ locations = {
     "lifescience3": {
         "initialDescription": "***",
         "description": "The top floor of the Life Science building. A hallway breaks north and a skyway is to the west.",
-        "exits": {"north": "heller3", "west": "swensonscience1", "down": "lifescience2"},
+        "exits": {"north": "heller3", "west": "swensonsci1", "down": "lifescience2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "MWAH1": {

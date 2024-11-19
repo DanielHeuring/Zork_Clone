@@ -1,6 +1,10 @@
 from time import sleep
-from typing import List
 from rooms import locations
+
+# Globals
+location = "dorm"
+prevLocation = 0
+backpack = []
 
 class Hall:
     def __init__(self, data):
@@ -8,7 +12,9 @@ class Hall:
         self.desc = data.get("description", "")
         self.exits = data.get("exits", {})
         self.actions = data.get("actions", {})
+        self.items = data.get("items", {})
         self.visited = False
+        self.inspected = False
 
     def visit_hall(self):
         if not self.visited:
@@ -20,7 +26,11 @@ class Hall:
             gprint(self.desc)
 
     def inspect_hall(self):
-       gprint(f"You inspect {self.name}. You see: {','.join(self.items) if self.items  else 'nothing special'}")
+        self.inspected = True
+        for item in self.items.values():
+            gprint(item.get("description"))
+        if len(self.items) == 0:
+            gprint("Nothing catches your eye") 
 
 # Initialize Halls with location Dict
 halls = {key: Hall(data) for key, data in locations.items()}
@@ -54,11 +64,6 @@ action_aliases = {"jump out window": jumpOutWindow,
                  "open window": openWindow
                  }
 
-# Globals
-location = "dorm"
-prevLocation = 0
-backpack = []
-
 #Functions
 def gprint(string):
     string = string + "\n"
@@ -88,6 +93,7 @@ def get_action(user_input):
             return action
     return None
 
+# Invalid user response for exits and actions
 def invalid_input(user_input, exit_take, action_take):
     if exit_take in exit_aliases:
         gprint("That is not a valid direction here")
@@ -95,6 +101,12 @@ def invalid_input(user_input, exit_take, action_take):
         gprint("That is not a valid action here")
     else:
         gprint("I don't know how to " + user_input)
+
+# Function for backpack
+def display_backpack():
+    print("---- Backpack ----")
+    for item in backpack:
+        print(item["name"])
 
 # Main Game Handler
 def handle_location(location_name):
@@ -104,10 +116,27 @@ def handle_location(location_name):
     current_hall.visit_hall()
 
     user_input = uinput("> ")
-    exit_take = get_exit(user_input)
+    exit_take = get_exit(user_input)    
     action_take = get_action(user_input)
 
-    if exit_take in current_hall.exits:
+    if user_input == "inspect":
+        current_hall.inspect_hall()
+        
+    elif "grab" in user_input and current_hall.inspected:
+        user_item = user_input.split("grab ")[-1]
+        for item in current_hall.items.values():
+            if user_item == item.get("name"):
+                backpack.append(item)
+                del current_hall.items[user_item]
+                gprint("You got the item!!")
+                break
+            else:
+                gprint("That is not a valid item")
+
+    elif "backpack" in user_input:
+        display_backpack()
+
+    elif exit_take in current_hall.exits:
         new_location = current_hall.exits[exit_take]
         changeLocation(new_location)   
 
