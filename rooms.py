@@ -51,7 +51,13 @@ locations = {
     "kirby2": {
         "initialDescription": "***",
         "description": "You are halfway down the stairs. To the south is the Office of Diversity and Inclusion. To the north, you spot the school store and a food court.",
-        "exits": {"north": "kirbyplaza2", "south": "", "up": "kirby3", "down": "kirby1"},
+        "exits": {"north": "kirbyplaza2", "south": "officediversity", "up": "kirby3", "down": "kirby1"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "officediversity":{
+        "initialDescription": "***",
+        "description": "You enter a room with a sitting area and smaller office space, you can not go further.",
+        "exits": {"north": "kirby2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "kirby1": {
