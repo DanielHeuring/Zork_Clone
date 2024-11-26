@@ -345,7 +345,7 @@ locations = {
     "engineering1": {
         "initialDescription": "***",
         "description": "Engineering labs line the halls, showcasing senior projects. A tunnel leads somewhere unknown.",
-        "exits": {"south": "edugr", "north": "civileng1sec2", "east": "vosskovach1", "up": "engineering2"},
+        "exits": {"south": "edugr", "north": "civilengfl1sec2", "east": "vosskovach1", "up": "engineering2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "engineering2": {
@@ -357,7 +357,7 @@ locations = {
     "vosskovach1": {
         "initialDescription": "***",
         "description": "You step into the hall and are greeted by a potent chemical scent.",
-        "exits": {"north": "civileng1sec1", "west": "engineering1", "up": "vosskovach2", "down": "vosskovachbs"},
+        "exits": {"north": "civilengfl1sec1", "west": "engineering1", "up": "vosskovach2", "down": "vosskovachbs"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "vosskovach2": {
