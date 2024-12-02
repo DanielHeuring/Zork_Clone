@@ -41,10 +41,10 @@ south = ["south", "s", "go s", "go south", "head south"]
 east = ["east", "e", "go e", "go east", "head east"]
 west = ["west", "w", "go w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
-enter = ["enter", "enter hall", "enter room"]
+enter = ["enter", "enter hall", "enter room", "go inside"]
 exitWindow = ["window", "jump out"]
-up_stairs = ["u", "go up", "up stairs", "go up stairs", "up"]
-down_stairs = ["d", "go down", "down stairs", "go down stairs", "down"]
+up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
+down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
 backup = ["back", "leave", "go back"]
 
 exit_aliases = {"north": north,
