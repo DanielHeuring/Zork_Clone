@@ -36,10 +36,10 @@ class Hall:
 halls = {key: Hall(data) for key, data in locations.items()}
 
 # Exits
-north = ["north", "n", "go north", "head north"]
-south = ["south", "s", "go south", "head south"]
-east = ["east", "e", "go east", "head east"]
-west = ["west", "w", "go west", "head west"]
+north = ["north", "n", "go n", "go north", "head north"]
+south = ["south", "s", "go s", "go south", "head south"]
+east = ["east", "e", "go e", "go east", "head east"]
+west = ["west", "w", "go w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
 enter = ["enter", "enter hall", "enter room"]
 exitWindow = ["window", "jump out"]
