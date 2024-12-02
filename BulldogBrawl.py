@@ -1,5 +1,5 @@
 from rooms import locations
-from GameState import  GameState
+from GameState import GameState
 
 # Game state Class
 state = GameState()
@@ -74,7 +74,7 @@ action_aliases = {"jump out window": jumpOutWindow,
                  "chicken": chickenDog
                  }
 
-#Functions
+# Functions
 def get_exit(user_input):
     for exit, aliases in exit_aliases.items():
         if user_input in aliases:
