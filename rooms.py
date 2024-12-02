@@ -222,7 +222,7 @@ locations = {
     "MWAH1": {
         "initialDescription": "***",
         "description": "You are at the farthest south point on campus. A hall heads north and east.",
-        "exits": {"north": "lifescience1", "east": "schoolofmedicine1", "up": "MWAH2", "down": "MWAHgr"},
+        "exits": {"north": "lifescience1", "east": "medicinehall1", "up": "MWAH2", "down": "MWAHgr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "MWAHgr": {
