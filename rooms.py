@@ -1,3 +1,64 @@
+import GameState
+global locations
+
+# This file contains the large dictionary of halls and their information
+# Also contains the functions relating to the actions taken in each hall/room
+
+def bucks_door_check(state: GameState, item_used, prev_exit):
+    if prev_exit  == "drbucks_locked_dog" and item_used == "chicken":
+        locations['heller3']['exits'].update(enter= "drbucks_office")
+
+    if prev_exit == "drbucks_locked_chain" and item_used == "acid":
+        locations['heller3']['exits'].update(enter= "drbucks_office")
+
+def unlock_bucks_acid(state: GameState):
+    print("--------------------")
+    acid_used = False
+    item_used = "acid"
+    for x in range(len(state.backpack) -1,-1,-1):
+        item = state.backpack[x]
+        if item.get("name") == "beaker of acid":
+            state.gprint("Pouring the acid upon the chains they quickly dissolve and fall away.")
+            prev_exit = locations[state.location]["exits"]["enter"]
+            locations['heller3']['exits'].update(enter= "drbucks_locked_dog")
+            acid_used = True
+            del state.backpack[x]
+
+    if not acid_used:
+        state.gprint("You do not have acid to melt the chains")
+
+    bucks_door_check(state, item_used, prev_exit)
+    
+def unlock_bucks_chicken(state: GameState):
+    print("--------------------")
+    chicken_used = False
+    item_used = "chicken"
+    for x in range(len(state.backpack) -1,-1,-1):
+        item = state.backpack[x]
+        if item.get("name") == "chicken wing":
+            state.gprint("Waving the chicken wing in front of the dog you gain its attention. Tossing it aside the dog sprints after it.")
+            prev_exit = locations[state.location]["exits"]["enter"]
+            locations['heller3']['exits'].update(enter= "drbucks_locked_chain")
+            chicken_used = True
+            del state.backpack[x]
+
+    if not chicken_used:
+        state.gprint("You need to find chicken to distract the dog.")
+
+    bucks_door_check(state, item_used, prev_exit)
+
+def unlock_chem_lab(state: GameState):
+    print("--------------------")
+    item_found = False
+    for x in state.backpack:
+        if x.get("name") == "bronze key":
+            state.gprint("You unlocked the door")
+            locations['chemistry4']['exits'].update(enter= "chemistrylab")
+            item_found = True
+
+    if not item_found:
+        state.gprint("You can't unlock this door")
+
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
@@ -20,7 +81,7 @@ locations = {
         "initialDescription": "***",
         "description": "You are in front of the LSH office",
         "exits": {"south": "dormhall", "east": "diningcenter"},
-        "actions": {"open door": "The door is locked.",
+        "actions": {"open door": "Nope",
                    "backpack": "**BACKPACK COMPONENTS**"}
     },
     "diningcenter": {
@@ -33,7 +94,7 @@ locations = {
     "kirby3": {
         "initialDescription": "***",
         "description": "You are at the top of a large and busy stairwell. To your north and south are two sets of doors.",
-        "exits": {"north": "rafters", "south": "kirbyballroom", "west": "diningcenter", "down": "kirby2"},
+        "exits": {"north": "rafters", "south": "kirbyBall", "west": "diningcenter", "down": "kirby2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "rafters": {
@@ -117,8 +178,22 @@ locations = {
     "heller3": {
         "initialDescription": "***",
         "description": "You are on the top floor of Heller Hall. A door with chains and a vicious dog blocks your way.",
-        "exits": {"down": "heller2", "enter": "drbucks_office", "south": "lifescience3"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "exits": {"down": "heller2", "enter": "drbucks_office_locked", "south": "lifescience3"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**",
+                    "acid": unlock_bucks_acid,
+                    "chicken": unlock_bucks_chicken}
+    },
+    "drbucks_office_locked": {
+        "description": "As you approach the door the vicous dog stands and starts to growl",
+        "exits": {"back": "heller3"}
+    },
+    "drbucks_locked_chain": {
+        "description": "The door is still securely shut with chains. Find something to break or melt the chains.",
+        "exits": {"back": "heller3"}
+    },
+    "drbucks_locked_dog": {
+        "description": "The dog still stands in your way. Find something to distract it",
+        "exits": {"back": "heller3"}
     },
     "lifescience1": {
         "initialDescription": "***",
@@ -213,8 +288,20 @@ locations = {
     "chemistry4": {
         "initialDescription": "***",
         "description": "This floor feels abandoned, but you notice a light on in a lab.",
-        "exits": {"down": "chemistry3", "east": "chemistrylab4"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "exits": {"down": "chemistry3", "enter": "lockedchem"},
+        "actions": {"backpack": "**BACKPACK COMPONENTS**",
+                    "unlock": unlock_chem_lab},
+        "items": {"bronze key": {"name": "bronze key", "description": "You see a bronze key tossed aside on the ground"}}
+    },
+    "lockedchem": {
+        "description": "This door is locked find the key.",
+        "exits": {"back": "chemistry4"}
+    },
+    "chemistrylab": {
+        "initialDescription": "***",
+        "description": "The lights flicker as you enter the room. Around you there are several tables littered with onjects you don't recognize.",
+        "exits": {"exit": "chemistry4"},
+        "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what youve come for. The bright green liquid swirling around. A beaker of acid."}}
     },
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
@@ -261,13 +348,13 @@ locations = {
     "humanities2": {
         "initialDescription": "***",
         "description": "The humanities hall is mostly comprised of music classrooms and offices. Hallways lead in all directions but west.",
-        "exits": {"north": "bohannongr", "west": "cinahallgr", "south": "abanderson2", "east": "webermusic2", "down": "humanities1", "up": "down"},
+        "exits": {"north": "bohannongr", "west": "cinahallgr", "south": "abanderson2", "east": "webermusic2", "down": "humanities1", "up": "humanities3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities3": {
         "initialDescription": "***",
         "description": "A long, bland hallway stretches out in front of you. Stairs lead up and down, with a hallway leading south.",
-        "exits": {"west": "cinahall1", "south": "abanderson3", "down": "humanities", "up": "humanities4"},
+        "exits": {"west": "cinahall1", "south": "abanderson3", "down": "humanities2", "up": "humanities4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities4": {
@@ -287,6 +374,12 @@ locations = {
         "description": "Weber Music Hall's performance stage is locked. A hallway extends north past Romano Gym, with stairs descending to the first floor.",
         "exits": {"north": "rsop1", "west": "humanities2", "down": "webermusic1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "rsop1": {
+        "initialDescription": "***",
+        "description": "Standing in a lobby of a sports arena you see doors are closed and locked except to the south",
+        "exits": {"south": "webermusic2"},
+        "actions": {}
     },
     "bohannongr": {
         "initialDescription": "***",
@@ -345,7 +438,7 @@ locations = {
     "engineering1": {
         "initialDescription": "***",
         "description": "Engineering labs line the halls, showcasing senior projects. A tunnel leads somewhere unknown.",
-        "exits": {"south": "edugr", "north": "civilengfl1sec2", "east": "vosskovach1", "up": "engineering2"},
+        "exits": {"south": "edugr", "north": "civilengfl1sec2", "east": "vosskovach1", "up": "engineering2", "enter": "outsidekathrynalib"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "engineering2": {

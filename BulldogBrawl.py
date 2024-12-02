@@ -1,10 +1,8 @@
-from time import sleep
 from rooms import locations
+from GameState import  GameState
 
-# Globals
-location = "dorm"
-prevLocation = 0
-backpack = []
+# Game state Class
+state = GameState()
 
 class Hall:
     def __init__(self, data):
@@ -19,18 +17,20 @@ class Hall:
     def visit_hall(self):
         if not self.visited:
             self.visited = True
-            print(location)
-            gprint(self.desc)
+            print(state.location)
+            state.gprint(self.desc)
         else:
-            print(location)
-            gprint(self.desc)
+            print(state.location)
+            state.gprint(self.desc)
 
     def inspect_hall(self):
         self.inspected = True
         for item in self.items.values():
-            gprint(item.get("description"))
+            print("--------------------")
+            state.gprint(item.get("description"))
         if len(self.items) == 0:
-            gprint("Nothing catches your eye") 
+            print("--------------------")
+            state.gprint("Nothing catches your eye") 
 
 # Initialize Halls with location Dict
 halls = {key: Hall(data) for key, data in locations.items()}
@@ -41,46 +41,40 @@ south = ["south", "s", "go south", "head south"]
 east = ["east", "e", "go east", "head east"]
 west = ["west", "w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
+enter = ["enter", "enter hall", "enter room"]
 exitWindow = ["window", "jump out"]
 up_stairs = ["u", "go up", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "down stairs", "go down stairs", "down"]
+backup = ["back", "leave", "go back"]
 
 exit_aliases = {"north": north,
                 "south": south,
                 "east": east,
                 "west": west,
-                "door": exitDoor,
+                "exit": exitDoor,
+                "enter": enter,
                 "window": exitWindow,
                 "up": up_stairs,
-                "down": down_stairs}
+                "down": down_stairs,
+                "back": backup}
 
 # Action Lists
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
 jumpOutWindow = ["jump out", "jump out window", "exit window", "jump"]
 openWindow = ["open", "open window", "window"]
+unlockDoor = ["unlock door", "unlock"]
+meltChains = ["use acid", "melt chain", "use beaker of acid"]
+chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 
 action_aliases = {"jump out window": jumpOutWindow,
                  "backpack": backpackNames,
-                 "open window": openWindow
+                 "open window": openWindow,
+                 "unlock": unlockDoor,
+                 "acid": meltChains,
+                 "chicken": chickenDog
                  }
 
 #Functions
-def gprint(string):
-    string = string + "\n"
-    for i in string:
-        print(i, end='', flush=True)
-        sleep(0.0001) # 0.02 for game
-
-def uinput(string):
-    print("\n")
-    output = (input(string)).lower().strip()
-    return str(output)
-
-def changeLocation(new_location):
-    global prevLocation, location
-    prevLocation = location
-    location = new_location
-
 def get_exit(user_input):
     for exit, aliases in exit_aliases.items():
         if user_input in aliases:
@@ -96,16 +90,16 @@ def get_action(user_input):
 # Invalid user response for exits and actions
 def invalid_input(user_input, exit_take, action_take):
     if exit_take in exit_aliases:
-        gprint("That is not a valid direction here")
+        state.gprint("That is not a valid direction here")
     elif action_take in action_aliases:
-        gprint("That is not a valid action here")
+        state.gprint("That is not a valid action here")
     else:
-        gprint("I don't know how to " + user_input)
+        state.gprint("I don't know how to " + user_input)
 
 # Function for backpack
 def display_backpack():
     print("---- Backpack ----")
-    for item in backpack:
+    for item in state.backpack:
         print(item["name"])
 
 # Main Game Handler
@@ -115,7 +109,7 @@ def handle_location(location_name):
     current_hall = halls[location_name]
     current_hall.visit_hall()
 
-    user_input = uinput("> ")
+    user_input = state.uinput("> ")
     exit_take = get_exit(user_input)    
     action_take = get_action(user_input)
 
@@ -126,26 +120,31 @@ def handle_location(location_name):
         user_item = user_input.split("grab ")[-1]
         for item in current_hall.items.values():
             if user_item == item.get("name"):
-                backpack.append(item)
+                state.backpack.append(item)
                 del current_hall.items[user_item]
-                gprint("You got the item!!")
+                print("--------------------")
+                state.gprint("You got the item!!")
                 break
             else:
-                gprint("That is not a valid item")
+                state.gprint("That is not a valid item")
 
     elif "backpack" in user_input:
         display_backpack()
 
     elif exit_take in current_hall.exits:
         new_location = current_hall.exits[exit_take]
-        changeLocation(new_location)   
+        state.changeLocation(new_location)   
 
     elif action_take in current_hall.actions:
-        pass
+        result = current_hall.actions.get(action_take)
+        if isinstance(result, str):
+            print(result)
+        else:
+            result(state)
             
     else:
         invalid_input(user_input, exit_take, action_take)
 
 # Main Game Loop
 while True:
-    handle_location(location)
+    handle_location(state.location)
