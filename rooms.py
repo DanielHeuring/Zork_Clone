@@ -4,22 +4,15 @@ global locations
 # This file contains the large dictionary of halls and their information
 # Also contains the functions relating to the actions taken in each hall/room
 
-def bucks_door_check(state: GameState, item_used, prev_exit):
-    if prev_exit  == "drbucks_locked_dog" and item_used == "chicken":
-        locations['heller3']['exits'].update(enter= "drbucks_office")
-
-    if prev_exit == "drbucks_locked_chain" and item_used == "acid":
-        locations['heller3']['exits'].update(enter= "drbucks_office")
-
 def unlock_bucks_acid(state: GameState):
     print("--------------------")
     acid_used = False
     item_used = "acid"
+    prev_exit = locations[state.location]["exits"]["enter"]
     for x in range(len(state.backpack) -1,-1,-1):
         item = state.backpack[x]
         if item.get("name") == "beaker of acid":
             state.gprint("Pouring the acid upon the chains they quickly dissolve and fall away.")
-            prev_exit = locations[state.location]["exits"]["enter"]
             locations['heller3']['exits'].update(enter= "drbucks_locked_dog")
             acid_used = True
             del state.backpack[x]
@@ -33,11 +26,11 @@ def unlock_bucks_chicken(state: GameState):
     print("--------------------")
     chicken_used = False
     item_used = "chicken"
+    prev_exit = locations[state.location]["exits"]["enter"]
     for x in range(len(state.backpack) -1,-1,-1):
         item = state.backpack[x]
         if item.get("name") == "chicken wing":
             state.gprint("Waving the chicken wing in front of the dog you gain its attention. Tossing it aside the dog sprints after it.")
-            prev_exit = locations[state.location]["exits"]["enter"]
             locations['heller3']['exits'].update(enter= "drbucks_locked_chain")
             chicken_used = True
             del state.backpack[x]
@@ -46,6 +39,13 @@ def unlock_bucks_chicken(state: GameState):
         state.gprint("You need to find chicken to distract the dog.")
 
     bucks_door_check(state, item_used, prev_exit)
+
+def bucks_door_check(state: GameState, item_used, prev_exit):
+    if prev_exit == "drbucks_locked_dog" and item_used == "chicken":
+        locations['heller3']['exits'].update(enter= "drbucks_office")
+
+    if prev_exit == "drbucks_locked_chain" and item_used == "acid":
+        locations['heller3']['exits'].update(enter= "drbucks_office")
 
 def unlock_chem_lab(state: GameState):
     print("--------------------")
