@@ -2,8 +2,6 @@ from time import sleep
 import random
 import sys
 global locations
-
-
 #File 1
 #Game State Class
 class GameState:
@@ -30,17 +28,16 @@ class GameState:
 
 state = GameState()
 #File 4
+#Final battle of the game
 def blackJack(state):
-    #Description of the "troll" 
-    print("""
-You here rattles coming from the dark corner of his office. All of the sudden
-a dark figure imerges. You scream out in terror. "AHhhhhh" You realize it was 
-Dr. Buck and are a little embaressed that you screamed. He questions you on
-what you are doing in his office until he notices the answer key in your hand.
+    state.gprint("""
+He questions you on what you are doing in his office until he notices the answer key in your hand.
 You attempt to run but the door slams shut and you cannot pry in open. You turn
 around and Dr. Buck has a deck of cards on his deck and asks if you want to play.
-He wants to play a version of blackjack where the difference in value deals damage
-to your health. 
+He challanges you to a game of blackjack.
+---hint---
+This game of blackjack is a version where each hand determines who and how much damage is dealt. Your goal is to reduce Dr. Buck's health from 50 to zero before he does the same to your 65 health. Winning a hand deals damage to Dr. Buck based on the difference in card values, while losing means you take the damage. Strategically decide when to hit or stand, and avoid busting to ensure your survival!
+----------
     """)
     #Intial Health Values
     buck_Health = 50
@@ -138,7 +135,7 @@ looks at you with dread and allows you to leave the room
 answer key in hand. You succesfully pass the final exam 
 and are able to move on with your college journey.
               """)
-        sys.exit()
+        menu(state)
     elif player_Health<=0:
         state.gprint("""
 Dr. Buck defeats you in his card game and rips the answer key
@@ -147,11 +144,7 @@ escorts you down the hall. You pass numerous students who point
 and laugh at you before arriving at the office of student conduct.
 You are told your time at UMD has come to an end. You have been expelled.
               """)
-        sys.exit()
-
-
-
-
+        menu(state)
 #File 2
 # This file contains the large dictionary of halls and their information
 # Also contains the functions relating to the actions taken in each hall/room
@@ -287,19 +280,19 @@ locations = {
     },
      "kirbyplaza2": {
         "initialDescription": "***",
-        "description": "-----",
+        "description": "There are no classrooms in this area and few students walking about. you can smell some nice scents to the north.",
         "exits": {"down": "kirbyplaza1", "south": "kirby2", "north": "foodcourt", "up": "kirbyplaza3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "foodcourt": {
         "initialDescription": "***",
-        "description": "-----",
+        "description": "Wow! There is real food being made here and it looks somewhat decent.",
         "exits": {"down": "techcenter", "south": "kirbyplaza2", "up": "kirbyplaza3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
      "kirbyplaza3": {
         "initialDescription": "***",
-        "description": "-----",
+        "description": "You climb up a pristine staircase to the top floor of kirby plaza and find a bunch of IT offices.",
         "exits": {"down": "kirbyplaza2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
@@ -311,9 +304,11 @@ locations = {
     },
     "thegrind": {
         "initialDescription": "***",
-        "description": "Needs a description",
+        "description": "You walk into a little shop cornor with snacks and drinks",
         "exits": {"south": "techcenter", "north": "outsidekathrynalib", "west": "labovitzfl1", "east": "montague1"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "actions": {"backpack": "**BACKPACK COMPONENTS**"},
+        "items": {"dnergy drink": {"name": "energy drink", "description":"A powerful energy drink that promises to keep you awake for hours."}}
+        
     },
     "heller1": {
         "initialDescription": "***",
@@ -905,10 +900,13 @@ def invalid_input(user_input, exit_take, action_take):
         state.gprint("I don't know how to " + user_input)
 
 # Function for backpack
-def display_backpack():
+def display_backpack(state):
     print("---- Backpack ----")
     for item in state.backpack:
         print(item["name"])
+
+
+
 
 # Main Game Handler
 def handle_location(location_name):
@@ -917,7 +915,7 @@ def handle_location(location_name):
     current_hall = halls[location_name]
     current_hall.visit_hall()
     if location_name=="game_over":
-        sys.exit()
+       menu(state)
 
     user_input = state.uinput("> ")
     exit_take = get_exit(user_input)    
@@ -955,9 +953,33 @@ def handle_location(location_name):
     else:
         invalid_input(user_input, exit_take, action_take)
 
-
-
-
 # Main Game Loop
-while True:
-    handle_location(state.location)
+def game_loop(state):
+    while True:
+        handle_location(state.location)
+#start menu and where player returns to after winning or losing.
+def menu(state):
+    state.gprint("""
+---------WELCOME TO BULLDOG BRAWl---------
+    1. Play game
+    2. Instructions
+    3. Exit""")
+    choice = state.uinput(">")
+    if choice =='1':
+        game_loop(state)
+    elif choice =='2':
+        state.gprint("""
+---------Instructions---------
+- Navigate the halls using commands like 'go north', 'go south', 'up', or 'down'.
+- Inspect rooms to find items and uncover hidden details.
+- Use 'grab <item>' to pick up an item after inspecting.
+- Manage your items using 'backpack' to check what you've collected.
+- Your goal is to explore, find items, and steal the final answer keys.!
+        """)
+        menu(state)
+    elif choice =='3':
+        sys.exit()
+    else:
+        state.gprint("Invalid input")
+
+menu(state)
