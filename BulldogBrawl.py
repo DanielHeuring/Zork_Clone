@@ -11,6 +11,7 @@ class Hall:
         self.exits = data.get("exits", {})
         self.actions = data.get("actions", {})
         self.items = data.get("items", {})
+        self.special_desc = data.get("specialDesc", "")
         self.visited = False
         self.inspected = False
 
@@ -24,12 +25,15 @@ class Hall:
             state.gprint(self.desc)
 
     def inspect_hall(self):
+        print("--------------------")
         self.inspected = True
         for item in self.items.values():
-            print("--------------------")
             state.gprint(item.get("description"))
-        if len(self.items) == 0:
-            print("--------------------")
+        
+        if self.special_desc:
+            state.gprint(self.special_desc)
+
+        elif len(self.items) == 0:
             state.gprint("Nothing catches your eye") 
 
 # Initialize Halls with location Dict
@@ -65,13 +69,15 @@ openWindow = ["open", "open window", "window"]
 unlockDoor = ["unlock door", "unlock"]
 meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
+talkTo = ["talk", "talk to them", "speak", "speak with"]
 
 action_aliases = {"jump out window": jumpOutWindow,
                  "backpack": backpackNames,
                  "open window": openWindow,
                  "unlock": unlockDoor,
                  "acid": meltChains,
-                 "chicken": chickenDog
+                 "chicken": chickenDog,
+                 "talk": talkTo
                  }
 
 # Functions

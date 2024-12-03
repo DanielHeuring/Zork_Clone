@@ -4,6 +4,10 @@ global locations
 # This file contains the large dictionary of halls and their information
 # Also contains the functions relating to the actions taken in each hall/room
 
+heller3 = "You are on the top floor of Heller Hall. A door with chains and a vicious dog blocks your way."
+heller3_dog = "Melted chains frame the door but the dog still sits there."
+heller3_chains = "The dog no longer stands in your way but chains block the door still."
+
 def unlock_bucks_acid(state: GameState):
     print("--------------------")
     acid_used = False
@@ -14,6 +18,8 @@ def unlock_bucks_acid(state: GameState):
         if item.get("name") == "beaker of acid":
             state.gprint("Pouring the acid upon the chains they quickly dissolve and fall away.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_dog")
+            # This snippet is supposed to rewrite the description however it is overwritten
+            locations['heller3']['description'] = heller3_dog
             acid_used = True
             del state.backpack[x]
 
@@ -32,8 +38,11 @@ def unlock_bucks_chicken(state: GameState):
         if item.get("name") == "chicken wing":
             state.gprint("Waving the chicken wing in front of the dog you gain its attention. Tossing it aside the dog sprints after it.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_chain")
+            # This snippet is supposed to rewrite the description however it is overwritten
+            locations['heller3']['description'] = heller3_chains
             chicken_used = True
             del state.backpack[x]
+            del locations['heller3']['actions']['chicken']
 
     if not chicken_used:
         state.gprint("You need to find chicken to distract the dog.")
@@ -51,13 +60,23 @@ def unlock_chem_lab(state: GameState):
     print("--------------------")
     item_found = False
     for x in state.backpack:
-        if x.get("name") == "bronze key":
+        if x.get("name") == "chemistry key":
             state.gprint("You unlocked the door")
             locations['chemistry4']['exits'].update(enter= "chemistrylab")
             item_found = True
 
     if not item_found:
         state.gprint("You can't unlock this door")
+
+def grad_student(state: GameState):
+    print("--------------------")
+    state.gprint("Grad Student: H-hello are you a student of Doctor Buck's?")
+    user_input = state.uinput("> ")
+    if user_input == "yes":
+        state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
+        state.backpack.append({"name": "chemistry key"})
+    else:
+        state.gprint("That's too bad. I wanted other students to succeed.")
 
 locations = {
     "dorm": {
@@ -177,7 +196,7 @@ locations = {
     },
     "heller3": {
         "initialDescription": "***",
-        "description": "You are on the top floor of Heller Hall. A door with chains and a vicious dog blocks your way.",
+        "description": heller3,
         "exits": {"down": "heller2", "enter": "drbucks_office_locked", "south": "lifescience3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**",
                     "acid": unlock_bucks_acid,
@@ -461,9 +480,10 @@ locations = {
     },
     "vosskovachbs": {
         "initialDescription": "***",
-        "description": "The bottom floor of Voss is tightly sealed. Stairs lead back up.",
+        "description": "The bottom floor of Voss is tightly sealed. Stairs lead back up but you think you see something in the shadows.",
         "exits": {"up": "vosskovach1"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "specialDesc": "In the corner you see an older student crouched and seems to be crying",
+        "actions": {"talk": grad_student}
     },
     "civilengfl1sec1": {
         "initialDescription": "***",
