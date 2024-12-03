@@ -843,8 +843,8 @@ enter = ["enter", "enter hall", "enter room", "go inside"]
 exitWindow = ["window", "jump out"]
 up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
-backup = ["back", "leave", "go back"]
-forward = ["foward", "f", "go foward"]
+backup = ["back", "leave", "go back","backward"]
+forward = ["forward", "f", "go forward", "foward"]
 
 exit_aliases = {"north": north,
                 "south": south,
@@ -860,13 +860,13 @@ exit_aliases = {"north": north,
                 }
 
 # Action Lists
-backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
+backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack", "bag"]
 jumpOutWindow = ["jump out", "jump out window", "exit window", "jump"]
 openWindow = ["open", "open window", "window"]
 unlockDoor = ["unlock door", "unlock"]
 meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
-fight = ["fight","attack","take exam"]
+fight = ["fight","attack","steal exam"]
 
 action_aliases = {"jump out window": jumpOutWindow,
                  "backpack": backpackNames,
@@ -914,8 +914,7 @@ def handle_location(location_name):
 
     current_hall = halls[location_name]
     current_hall.visit_hall()
-    if location_name=="game_over":
-       menu(state)
+
 
     user_input = state.uinput("> ")
     exit_take = get_exit(user_input)    
@@ -957,6 +956,12 @@ def handle_location(location_name):
 def game_loop(state):
     while True:
         handle_location(state.location)
+        if state.location == "game_over":
+            state.gprint("""The wind picks you up and blows you away. You get lost in the dark rain on the streets of Duluth. You approach a homeless man for help and he stabs you.
+--------GAME OVER--------""")
+            state.location ="dorm"
+            menu(state)
+
 #start menu and where player returns to after winning or losing.
 def menu(state):
     state.gprint("""
@@ -974,11 +979,23 @@ def menu(state):
 - Inspect rooms to find items and uncover hidden details.
 - Use 'grab <item>' to pick up an item after inspecting.
 - Manage your items using 'backpack' to check what you've collected.
-- Your goal is to explore, find items, and steal the final answer keys.!
+- Your goal is to explore, find items, and steal the final answer keys! 
+- [Hint: They are in Dr. Buck's office.]
         """)
         menu(state)
     elif choice =='3':
         sys.exit()
+    elif choice == 'password':
+        cheat = input("Enter the room name to skip to: ").strip().lower()
+
+
+        if cheat in state.location:
+            state.location = cheat  
+            print(f"Cheat activated: You have been moved to the '{state.location}' room.")
+        else:
+            print("Invalid room name. Please try again.")
+
+        game_loop(state)
     else:
         state.gprint("Invalid input")
 
