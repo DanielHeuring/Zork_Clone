@@ -135,6 +135,7 @@ looks at you with dread and allows you to leave the room
 answer key in hand. You succesfully pass the final exam 
 and are able to move on with your college journey.
               """)
+        state.location="dorm"
         menu(state)
     elif player_Health<=0:
         state.gprint("""
@@ -144,6 +145,7 @@ escorts you down the hall. You pass numerous students who point
 and laugh at you before arriving at the office of student conduct.
 You are told your time at UMD has come to an end. You have been expelled.
               """)
+        state.location="dorm"
         menu(state)
 #File 2
 # This file contains the large dictionary of halls and their information
@@ -998,5 +1000,6 @@ def menu(state):
         game_loop(state)
     else:
         state.gprint("Invalid input")
+        menu(state)
 
 menu(state)
