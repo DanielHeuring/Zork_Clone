@@ -1,9 +1,11 @@
+import sys
 from rooms import locations
 from GameState import GameState
 
 # Game state Class
 state = GameState()
 
+# Hall Class
 class Hall:
     def __init__(self, data):
         self.init_des = data.get("initialDescription", "")
@@ -11,7 +13,7 @@ class Hall:
         self.exits = data.get("exits", {})
         self.actions = data.get("actions", {})
         self.items = data.get("items", {})
-        self.special_desc = data.get("specialDesc", "")
+        self.special_desc = data.get("specialDesc", {})
         self.visited = False
         self.inspected = False
 
@@ -19,10 +21,18 @@ class Hall:
         if not self.visited:
             self.visited = True
             print(state.location)
-            state.gprint(self.desc)
+            if state.location == "heller3":
+                for desc in self.desc.values():
+                    state.gprint(desc)
+            else:
+                state.gprint(self.desc)
         else:
             print(state.location)
-            state.gprint(self.desc)
+            if state.location == "heller3":
+                for desc in self.desc.values():
+                    state.gprint(desc)
+            else:
+                state.gprint(self.desc)
 
     def inspect_hall(self):
         print("--------------------")
@@ -31,7 +41,10 @@ class Hall:
             state.gprint(item.get("description"))
         
         if self.special_desc:
-            state.gprint(self.special_desc)
+            for desc in self.special_desc.values():
+                state.gprint(desc)
+                
+            #state.gprint(self.special_desc)
 
         elif len(self.items) == 0:
             state.gprint("Nothing catches your eye") 
@@ -50,6 +63,7 @@ exitWindow = ["window", "jump out"]
 up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
 backup = ["back", "leave", "go back"]
+forward = ["foward", "f", "go foward"]
 
 exit_aliases = {"north": north,
                 "south": south,
@@ -60,7 +74,9 @@ exit_aliases = {"north": north,
                 "window": exitWindow,
                 "up": up_stairs,
                 "down": down_stairs,
-                "back": backup}
+                "back": backup,
+                "forward":forward
+                }
 
 # Action Lists
 backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
@@ -70,6 +86,7 @@ unlockDoor = ["unlock door", "unlock"]
 meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 talkTo = ["talk", "talk to them", "speak", "speak with"]
+fight = ["fight", "attack", "take exam"]
 
 action_aliases = {"jump out window": jumpOutWindow,
                  "backpack": backpackNames,
@@ -77,8 +94,19 @@ action_aliases = {"jump out window": jumpOutWindow,
                  "unlock": unlockDoor,
                  "acid": meltChains,
                  "chicken": chickenDog,
-                 "talk": talkTo
+                 "talk": talkTo,
+                 "fight": fight
                  }
+
+# Instruction Variable
+instructions = """
+---------Instructions---------
+- Navigate the halls using commands like 'go north', 'go south', 'up', or 'down'.
+- Inspect rooms to find items and uncover hidden details.
+- Use 'grab <item>' to pick up an item after inspecting.
+- Manage your items using 'backpack' to check what you've collected.
+- Your goal is to explore, find items, and steal the final answer keys.!
+        """
 
 # Functions
 def get_exit(user_input):
@@ -115,12 +143,19 @@ def handle_location(location_name):
     current_hall = halls[location_name]
     current_hall.visit_hall()
 
+    if location_name=="game_over":
+       #menu(state)
+       pass
+
     user_input = state.uinput("> ")
     exit_take = get_exit(user_input)    
     action_take = get_action(user_input)
 
     if user_input == "inspect":
         current_hall.inspect_hall()
+
+    elif user_input == "instructions":
+        state.gprint(f"{instructions}")
         
     elif "grab" in user_input and current_hall.inspected:
         user_item = user_input.split("grab ")[-1]
@@ -129,10 +164,10 @@ def handle_location(location_name):
                 state.backpack.append(item)
                 del current_hall.items[user_item]
                 print("--------------------")
-                state.gprint("You got the item!!")
+                state.gprint(f"You got the {user_item}!!")
                 break
             else:
-                state.gprint("That is not a valid item")
+                state.gprint(f"{user_item} is not a valid item")
 
     elif "backpack" in user_input:
         display_backpack()
@@ -152,5 +187,26 @@ def handle_location(location_name):
         invalid_input(user_input, exit_take, action_take)
 
 # Main Game Loop
-while True:
-    handle_location(state.location)
+def game_loop(state):
+    while True:
+        handle_location(state.location)
+
+#Start Menu
+def menu(state):
+    state.gprint("""
+---------WELCOME TO BULLDOG BRAWl---------
+    1. Play game
+    2. Instructions
+    3. Exit""")
+    choice = state.uinput("> ")
+    if choice =='1':
+        game_loop(state)
+    elif choice =='2':
+        state.gprint(f"{instructions}")
+        menu(state)
+    elif choice =='3':
+        sys.exit()
+    else:
+        state.gprint("Invalid input")
+
+menu(state)

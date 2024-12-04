@@ -1,4 +1,5 @@
 import GameState
+from Blackjack_Battle import blackJack
 global locations
 
 # This file contains the large dictionary of halls and their information
@@ -18,8 +19,7 @@ def unlock_bucks_acid(state: GameState):
         if item.get("name") == "beaker of acid":
             state.gprint("Pouring the acid upon the chains they quickly dissolve and fall away.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_dog")
-            # This snippet is supposed to rewrite the description however it is overwritten
-            locations['heller3']['description'] = heller3_dog
+            locations['heller3']["description"].update(desc= heller3_dog)
             acid_used = True
             del state.backpack[x]
 
@@ -38,8 +38,7 @@ def unlock_bucks_chicken(state: GameState):
         if item.get("name") == "chicken wing":
             state.gprint("Waving the chicken wing in front of the dog you gain its attention. Tossing it aside the dog sprints after it.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_chain")
-            # This snippet is supposed to rewrite the description however it is overwritten
-            locations['heller3']['description'] = heller3_chains
+            locations['heller3']["description"].update(desc= heller3_chains)
             chicken_used = True
             del state.backpack[x]
             del locations['heller3']['actions']['chicken']
@@ -78,6 +77,27 @@ def grad_student(state: GameState):
     else:
         state.gprint("That's too bad. I wanted other students to succeed.")
 
+def frat_guys(state: GameState):
+    print("--------------------")
+    state.gprint("""
+Frat Guy #1: Are you sure it's there?\n
+Frat Guy #2: Trust me bro it's in that office.\n
+Frat Guy #3: I heard it was password protected by a complex equation though..\n
+Frat Guy #2: Hey you there you seem smart.\n
+Frat Guy #3: Yeah do use a favor. Break into our math teacher's office for us.\n
+Frat Guy #1: If you steal the exam key we'll put you on the list for our next party.\n
+                 """)
+    state.gprint("Do you accept the quest to steal the key for them (yes or no)")
+    user_input = state.uinput("> ")
+    if user_input == "yes":
+        state.gprint("Frat Guy #2: Great! Meet us in Labovitz when you get it.")
+    elif user_input == "no":
+        state.gprint("Frat Guy #1: You'll never be accepted into a party during your time at UMD then!!")
+
+    # Supposed to delete the desc but having problems
+    del locations['underground']['specialDesc']['test']
+    del locations['underground']['actions']['talk']
+
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
@@ -92,7 +112,7 @@ locations = {
     "dormhall": {
         "initialDescription": "***",
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
-        "exits": {"north": "LSHdesk", "enter": "dorm", "south": "offcampus"},
+        "exits": {"north": "LSHdesk", "enter": "dorm"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"},
         "items": {"ucard": {"name": "ucard", "description": "You see a Ucard laying face down on the floor"}}
     },
@@ -108,7 +128,7 @@ locations = {
         "description": "You stop a moment to look inside the dining center. The food looks like it is suitable for a dog.",
         "exits": {"west": "LSHdesk", "east": "kirby3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"},
-        "items": {"chicken wing": {"name": "chicken wing", "description": "Laying near the entrance you see a discarded chicken wing"}}
+        "items": {"chicken wing": {"name": "chicken wing", "description": "Laying near the entrance you see a discarded <chicken wing>"}}
     },
     "kirby3": {
         "initialDescription": "***",
@@ -119,52 +139,84 @@ locations = {
     "rafters": {
         "initialDescription": "***",
         "description": "You enter a bare white room with some tables",
-        "exits": {"south": "kirby3"},
+        "exits": {"south": "kirby3", "north": "kirbybalcony"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "kirbybalcony": {
+        "initialDescription": "***",
+        "description": "You stand on a balcony overlooking a bus stop.",
+        "exits": {"south": "rafters"},
     },
     "kirbyBall": {
         "intialDescription": "***",
         "description": "Large room with pillars and wooden floor",
-        "exits": {"north": "kirby3"},
+        "exits": {"north": "kirby3", "south": "kirbystaircase3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "kirbystaircase3": {
+        "initialDescription": "***",
+        "description": "You are at the top of a stairwell that only goes down. To the north lays the ballroom.",
+        "exits": {"north": "kirbyBall", "down": "kirbystaircase2"},
+    },
+    "kirbystaircase2": {
+        "initialDescription": "***",
+        "description": "Stairs lead up and down. North of you is the Multiculural Center",
+        "exits": {"down": "kirbysc"},
     },
     "kirby2": {
         "initialDescription": "***",
-        "description": "You are halfway down the stairs. To the south is the Office of Diversity and Inclusion. To the north, you spot the school store and a food court.",
-        "exits": {"north": "kirbyplaza2", "south": "officediversity", "up": "kirby3", "down": "kirby1"},
+        "description": "You are halfway down the stairs. To the south is the Multicultural Center and Offices of Diversity. To the north, you spot the school store and a food court.",
+        "exits": {"north": "kirbyplaza2", "south": "multicultural", "up": "kirby3", "down": "kirbydesk"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-    "officediversity":{
+    "multicultural":{
         "initialDescription": "***",
         "description": "You enter a room with a sitting area and smaller office space, you can not go further.",
         "exits": {"north": "kirby2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-    "kirby1": {
+    "kirbydesk": {
         "initialDescription": "***",
-        "description": "You are at the bottom of a large stairwell. You see hallways leading in all directions.",
-        "exits": {"north": "kirbyplaza1", "south": "heller1", "up": "kirby2",  "down": "soloncc"},
+        "description": "You are at the bottom of a large stairwell in front of the kirby help desk. You see hallways leading in three directions.",
+        "exits": {"north": "kirbyplaza1", "south": "kirbysc", "up": "kirby2",  "down": "soloncc"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+    },
+    "kirbysc": {
+        "initialDescription": "***",
+        "description": "You stand admidst what must be the busiest hall on campus. To your north there is the student desk. Theres another stairwell going up here with more stairs leading down near one end of the hall. South of you lay another hall.",
+        "exits": {"north": "kirbydesk", "south": "heller1", "down": "underground", "up": "kirbystaircase2"}
+    },
+    "underground": {
+        "initialDescription": "***",
+        "description": "Entering into the underground you notice the low ceilings and what seems like an 80's themed bowling alley.",
+        "exits": {"up": "kirbysc", "east": "soloncc"},
+        "specialDesc": {"test": "Standing around a pool table there are three so called frat guy's."},
+        "actions": {"talk": frat_guys}
     },
     "kirbyplaza1": {
         "initialDescription": "***",
         "description": "-----",
-        "exits": {"south": "kirby1", "north": "techcenter","east": "cinahall1","up": "kirbyplaza2"},
+        "exits": {"south": "kirbydesk", "north": "techcenter","east": "cinahall1","up": "kirbyplaza2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
      "kirbyplaza2": {
         "initialDescription": "***",
-        "description": "-----",
+        "description": "You are standing outside of the upper UMD store. To your north is the food court and to the south is kirby floor 2.",
         "exits": {"down": "kirbyplaza1", "south": "kirby2", "north": "foodcourt", "up": "kirbyplaza3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "foodcourt": {
         "initialDescription": "***",
-        "description": "-----",
-        "exits": {"down": "techcenter", "south": "kirbyplaza2", "up": "kirbyplaza3"},
+        "description": "Around you seems to be food that is more fitting than that from the DC. There are two exits one to the north and south.",
+        "exits": {"down": "techcenter", "south": "kirbyplaza2", "up": "kirbyplaza3", "north": "NorthofFC"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-     "kirbyplaza3": {
+    "NorthofFC": {
+        "initialDescription": "***",
+        "descritpion": "The food court lies south. There's a staircase and a hall leading east.",
+        "exits": {"south": "foodcourt", "east": "bohannon2"}
+    },
+    "kirbyplaza3": {
         "initialDescription": "***",
         "description": "-----",
         "exits": {"down": "kirbyplaza2"},
@@ -185,7 +237,7 @@ locations = {
     "heller1": {
         "initialDescription": "***",
         "description": "The hallway continues to run north-south. There is a stairwell that takes you to the second floor of Heller Hall.",
-        "exits": {"north": "kirby1", "south": "lifescience1", "up": "heller2"},
+        "exits": {"north": "kirbysc", "south": "lifescience1", "up": "heller2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "heller2": {
@@ -196,7 +248,7 @@ locations = {
     },
     "heller3": {
         "initialDescription": "***",
-        "description": heller3,
+        "description": {"desc": heller3},
         "exits": {"down": "heller2", "enter": "drbucks_office_locked", "south": "lifescience3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**",
                     "acid": unlock_bucks_acid,
@@ -325,7 +377,7 @@ locations = {
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
-        "exits": {"north": "cinahallgr", "east": "darlandadmin", "up": "kirby1", "south": "chemistry1"},
+        "exits": {"north": "cinahallgr", "east": "darlandadmin", "up": "kirbydesk", "south": "chemistry1", "west": "underground"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "darlandadmin": {
@@ -400,10 +452,15 @@ locations = {
         "exits": {"south": "webermusic2"},
         "actions": {}
     },
+    "rsop": {
+      "initialDescription": "***",
+      "description": "There are many tunnels down here but nothing seems important. Head south or up.",
+      "exits": {"up": "rsop1", "south": "webermusic1"}  
+    },
     "bohannongr": {
         "initialDescription": "***",
         "description": "You notice Bohannon 90, a massive lecture hall. A hallway runs west to Ven Den and also runs north and south.",
-        "exits": {"south": "humanities2", "north": "montaguegr", "west": "venden", "up": "bohannon2"},
+        "exits": {"south": "humanities2", "north": "montaguegr", "west": "venden", "up": "bohannon1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon1": {
@@ -414,8 +471,8 @@ locations = {
     },
     "bohannon2": {
         "initialDescription": "***",
-        "description": "The school seems to be full of classrooms, and western exits take you to Kirby Plaza.",
-        "exits": {"west": "foodcourt", "down": "bohannon1", "up": "bohannon3"},
+        "description": "The school seems to be full of classrooms, and to the west brings you north of the food court.",
+        "exits": {"west": "NorthofFC", "down": "bohannon1", "up": "bohannon3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon3": {
@@ -457,6 +514,7 @@ locations = {
     "engineering1": {
         "initialDescription": "***",
         "description": "Engineering labs line the halls, showcasing senior projects. A tunnel leads somewhere unknown.",
+        "specialDesc": "You overhear a group of students say <Wow the test average was really high this time. It was a wopping 57!!>",
         "exits": {"south": "edugr", "north": "civilengfl1sec2", "east": "vosskovach1", "up": "engineering2", "enter": "outsidekathrynalib"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
@@ -639,7 +697,7 @@ locations = {
         "initialDescription": "***",
         "description": "You have managed to break into Dr. Buck's office. His desk is riddled with papers. You notice a bottle on the desk labeled 'Tears of Previous Students'. Your body shakes as your nerves increase. You finally find what you are looking for, a briefcase labeled 'Final Exam'. You open it up and find the answer key. Just as you are about to leave, Dr. Buck enters the room.",
         "exits": {"exit": "heller3"},
-        "actions": {}
+        "actions": {"fight": blackJack}
     },
     "drbuck_confrontation": {
         "initialDescription": "***",
@@ -647,16 +705,16 @@ locations = {
         "exits": {},
         "actions": {"bribe": "If over 100 dollars you win else game over", "other": "game over"}
     },
-    "invite_required": {
+    "offcampus": {
         "initialDescription": "***",
         "description": "You arrive off campus at an old rundown house. You can hear music playing. Your friend invites you in.",
-        "exits": {"forward": "in_the_house", "backward": "dorm_hallway"},
+        "exits": {"enter": "in_the_house", "back": "dormhall"},
         "actions": {}
     },
     "in_the_house": {
         "initialDescription": "***",
         "description": "You step inside the front door and are handed a beverage you have never even heard of. People are talking all around you. You walk over a rug and are unsure what the original color is.",
-        "exits": {"forward": "pit", "backward": "outside", "rug": "secret_basement"},
+        "exits": {"exit": "offcampus"},
         "actions": {}
     },
     "pit": {
