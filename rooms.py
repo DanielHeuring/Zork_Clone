@@ -320,18 +320,18 @@ locations = {
     "foodcourt": {
         "initialDescription": "***",
         "description": "Around you seems to be food that is more fitting than that from the DC. There are two exits one to the north and south.",
-        "exits": {"down": "techcenter", "south": "kirbyplaza2", "up": "kirbyplaza3", "north": "NorthofFC"},
+        "exits": {"down": "techcenter", "south": "kirbyplaza2", "up": "kirbyplaza3", "north": "northoffc"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
-    "NorthofFC": {
+    "northoffc": {
         "initialDescription": "***",
-        "descritpion": "The food court lies south. There's a staircase and a hall leading east.",
+        "description": "The food court lies south. There's a staircase and a hall leading east.",
         "exits": {"south": "foodcourt", "east": "bohannon2", "up": "kirbyplaza3"}
     },
     "kirbyplaza3": {
         "initialDescription": "***",
         "description": "You're in a all white hallway that seems almost hospital like. Hallways lead south and east with stairs leading down.",
-        "exits": {"down": "NorthofFC", "east": "bohannon3", "south": "kirbybalcony"},
+        "exits": {"down": "northoffc", "east": "bohannon3", "south": "kirbybalcony"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "techcenter": {
@@ -368,7 +368,8 @@ locations = {
     },
     "drbucks_office_locked": {
         "description": "As you approach the door the vicous dog stands and starts to growl",
-        "exits": {"back": "heller3"}
+        "exits": {"back": "heller3"},
+        "actions": {}
     },
     "drbucks_locked_chain": {
         "description": "The door is still securely shut with chains. Find something to break or melt the chains.",
@@ -591,7 +592,7 @@ locations = {
     "bohannon2": {
         "initialDescription": "***",
         "description": "The school seems to be full of classrooms, and to the west brings you north of the food court.",
-        "exits": {"west": "NorthofFC", "down": "bohannon1", "up": "bohannon3"},
+        "exits": {"west": "northoffc", "down": "bohannon1", "up": "bohannon3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon3": {
