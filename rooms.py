@@ -63,6 +63,7 @@ def unlock_chem_lab(state: GameState):
         if x.get("name") == "chemistry key":
             state.gprint("You unlocked the door")
             locations['chemistry4']['exits'].update(enter= "chemistrylab")
+            del locations["chemistry4"]["specialDesc"]["desc"]
             item_found = True
 
     if not item_found:
@@ -71,11 +72,12 @@ def unlock_chem_lab(state: GameState):
 def grad_student(state: GameState):
     while True:
         print("--------------------")
-        state.gprint("Grad Student: H-hello are you a student of Doctor Buck's?")
+        state.gprint("Grad Student: H-hello are you a student of Doctor Buck's? (yes or no)")
         user_input = state.uinput("> ")
         if user_input == "yes":
             print("--------------------")
             state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
+            state.gprint("\nYou got the chemistry needed for the lab.")
             state.backpack.append({"name": "chemistry key"})
             break
         elif "no":
@@ -83,6 +85,7 @@ def grad_student(state: GameState):
             state.gprint("Grad Student: That's too bad. I wanted other students to succeed.")
             break
         else:
+            print("--------------------")
             state.gprint("Grad Student: Huh what was that?")
 
 def frat_guys(state: GameState):
@@ -115,18 +118,19 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
             del locations['underground']['actions']['talk']
             break
         else:
+            print("--------------------")
             state.gprint("That is not a valid response.")
 
 def unlock_office(state: GameState):
     print("--------------------")
     state.gprint("As you approach the lock you see a sticky note stuck right above the key pad.")
-    state.gprint("The note says - The code to my office is ----math problem----")
+    state.gprint("The note says - The code to my office is: sin(90)")
     state.gprint("Attempt to unlock door (yes or no)")
     attempts = 5
     user_input = state.uinput("> ")
     while user_input == "yes" and attempts != 0:
         print("--------------------")
-        answer = 0
+        answer = 1
         state.gprint("Enter the answer")
         user_answer = state.uinput("> ")
         try:
@@ -197,8 +201,13 @@ def jump_out(state: GameState):
     state.gprint("You fall to your death. What were you thinking?")
     state.location = "game_over"
 
-def class_mate():
-    pass
+def class_mate(state: GameState):
+    print("--------------------")
+    state.gprint("Classmate: Hey! You're finally here. We have a lot of work to do to steal the exam.\n")
+    state.gprint("Classmate: Buck's office is somewhere in heller or life science. Also his door is guarded by a dog and chains. There's talk about an old student of bucks hanging out in the engineering portion of the school and he might have something we need.\n")
+    state.gprint("Classmate: Go find and talk to them and try to get the exam before it's too late.")
+    del locations['venden']['specialDesc']["desc"]
+    del locations['venden']['actions']['talk']
 
 locations = {
     "dorm": {
@@ -287,8 +296,7 @@ locations = {
         "initialDescription": "***",
         "description": "You stand admidst what must be the busiest hall on campus. To your north there is the student desk. Theres another stairwell going up here with more stairs leading down near one end of the hall. South of you lay another hall.",
         "specialDesc": {"desc": "You see your classmate sitting at a booth table with several pieces of paper layed before him."},
-        "exits": {"north": "kirbydesk", "south": "heller1", "down": "underground", "up": "kirbystaircase2"},
-        "actions": {"talk": class_mate}
+        "exits": {"north": "kirbydesk", "south": "heller1", "down": "underground", "up": "kirbystaircase2"}
     },
     "underground": {
         "initialDescription": "***",
@@ -463,13 +471,15 @@ locations = {
     "chemistry4": {
         "initialDescription": "***",
         "description": "This floor feels abandoned, but you notice a light on in a lab.",
+        "specialDesc": {"desc": "The lab seems important. There might be something in there."},
         "exits": {"down": "chemistry3", "enter": "lockedchem"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**",
-                    "unlock": unlock_chem_lab}
+                    "use_ckey": unlock_chem_lab}
     },
     "lockedchem": {
         "description": "This door is locked find the key.",
-        "exits": {"back": "chemistry4"}
+        "exits": {"exit": "chemistry4"},
+        "actions": {"use_ckey": unlock_chem_lab}
     },
     "chemistrylab": {
         "initialDescription": "***",
@@ -757,9 +767,10 @@ locations = {
     },
     "venden": {
         "initialDescription": "***",
-        "description": "The lights turn on when you enter the room. It’s just a simple lounge area. You notice a microwave that might be useful later.",
+        "description": "You enter the venden students are sitting at the several tables around the room.",
+        "specialDesc": {"desc": "You see your classmate sitting in one corner of the room."},
         "exits": {"east": "bohannongr", "up": "bohannon1"},
-        "actions": {}
+        "actions": {"talk": class_mate}
     },
     "marshallpacfl1": {
         "initialDescription": "***",

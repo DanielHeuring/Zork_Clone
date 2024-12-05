@@ -20,14 +20,14 @@ class Hall:
     def visit_hall(self):
         if not self.visited:
             self.visited = True
-            print(state.location)
+            print(state.location.capitalize())
             if state.location == "heller3":
                 for desc in self.desc.values():
                     state.gprint(desc)
             else:
                 state.gprint(self.desc)
         else:
-            print(state.location)
+            print(state.location.capitalize())
             if state.location == "heller3":
                 for desc in self.desc.values():
                     state.gprint(desc)
@@ -80,6 +80,7 @@ exit_aliases = {"north": north,
 jumpOutWindow = ["jump out", "jump out window", "exit window", "jump"]
 openWindow = ["open", "open window", "window"]
 unlockDoor = ["unlock door", "unlock", "open door"]
+chemKey = ["use chemistry key", "unlock lab"]
 meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 talkTo = ["talk", "talk to them", "speak", "speak with"]
@@ -91,7 +92,8 @@ action_aliases = {"jump_out_window": jumpOutWindow,
                  "acid": meltChains,
                  "chicken": chickenDog,
                  "talk": talkTo,
-                 "fight": fight
+                 "fight": fight,
+                 "use_ckey": chemKey
                  }
 
 # Instruction Variable
@@ -104,6 +106,14 @@ instructions = """
 - Manage your items using 'backpack' to check what you've collected.
 - Your goal is to explore, find items, and steal the final answer keys.!
         """
+
+help = """
+---------Helpful Commands---------
+- Make sure to inspect halls with <inspect>!!!
+- Directional Commands: north, south, west, east, up, down
+- Special Commands: exit, enter, back, backpack
+- Actions: unlock door, use <item name>, talk
+"""
 
 # Functions
 def get_exit(user_input):
@@ -152,8 +162,8 @@ def handle_location(location_name):
     if user_input == "inspect":
         current_hall.inspect_hall()
 
-    elif user_input == "instructions":
-        state.gprint(f"{instructions}")
+    elif user_input == "help":
+        state.gprint(f"{help}")
         
     elif "grab" in user_input and current_hall.inspected:
         user_item = user_input.split("grab ")[-1]
