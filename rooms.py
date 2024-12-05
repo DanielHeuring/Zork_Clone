@@ -79,31 +79,36 @@ def grad_student(state: GameState):
         state.gprint("That's too bad. I wanted other students to succeed.")
 
 def frat_guys(state: GameState):
-    print("--------------------")
-    state.gprint("""
+    while True:
+        print("--------------------")
+        state.gprint("""
 Frat Guy #1: Are you sure it's there?\n
 Frat Guy #2: Trust me bro it's in that office.\n
 Frat Guy #3: I heard it was password protected by a complex equation though..\n
 Frat Guy #2: Hey you there you seem smart.\n
 Frat Guy #3: Yeah do use a favor. Break into our math teacher's office for us.\n
 Frat Guy #1: If you steal the exam key we'll put you on the list for our next party.\n
-                 """)
-    state.gprint("Do you accept the quest to steal the key for them (yes or no)")
-    user_input = state.uinput("> ")
-    if user_input == "yes":
-        state.gprint("Frat Guy #2: Great! The office is in soloncc. Meet us in Labovitz when you get it.")
-        locations['soloncc']['actions'].update(unlock= unlock_office)
-        locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find.")
-        locations['labovitzfl1']['specialDesc'].update(desc= "Three frat guys sit huddled around a table off to the side.")
-        locations['labovitzfl1']['actions'].update(talk= give_key)
-        del locations['underground']['specialDesc']['test']
-        del locations['underground']['actions']['talk']
-    elif user_input == "no":
-        state.gprint("Frat Guy #1: You'll never be accepted into a party during your time at UMD then!!")
-        del locations['underground']['specialDesc']['test']
-        del locations['underground']['actions']['talk']
-    else:
-        state.gprint("That is not a valid response.")
+                    """)
+        state.gprint("Do you accept the quest to steal the key for them (yes or no)")
+        user_input = state.uinput("> ")
+        if user_input == "yes":
+            print("--------------------")
+            state.gprint("Frat Guy #2: Great! The office is in soloncc. Meet us in Labovitz when you get it.")
+            locations['soloncc']['actions'].update(unlock= unlock_office)
+            locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find.")
+            locations['labovitzfl1']['specialDesc'].update(desc= "Three frat guys sit huddled around a table off to the side.")
+            locations['labovitzfl1']['actions'].update(talk= give_key)
+            del locations['underground']['specialDesc']['test']
+            del locations['underground']['actions']['talk']
+            break
+        elif user_input == "no":
+            print("--------------------")
+            state.gprint("Frat Guy #1: You'll never be accepted into a party during your time at UMD then!!")
+            del locations['underground']['specialDesc']['test']
+            del locations['underground']['actions']['talk']
+            break
+        else:
+            state.gprint("That is not a valid response.")
 
 def unlock_office(state: GameState):
     print("--------------------")
