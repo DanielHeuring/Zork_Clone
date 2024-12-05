@@ -2,7 +2,7 @@ from time import sleep
 # This class is for functions and variables that handle the basic enviroment of the game
 class GameState:
     def __init__(self):
-        self.location = "underground"
+        self.location = "dorm"
         self.prevLocation = 0
         self.backpack = []
 
@@ -10,7 +10,7 @@ class GameState:
         string = string + "\n"
         for i in string:
             print(i, end='', flush=True)
-            sleep(0.0001) # 0.02 for game
+            sleep(0.00001) # 0.02 for game
 
     def uinput(self, string):
         print("\n")

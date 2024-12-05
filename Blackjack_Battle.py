@@ -108,7 +108,7 @@ and are able to move on with your college journey.
               """)
         print("--------------------")
         state.gprint("Thank you for playing!!!")
-        sys.exit
+        sys.exit()
     elif player_Health<=0:
         state.gprint("""
 Dr. Buck defeats you in his card game and rips the answer key
@@ -119,5 +119,5 @@ You are told your time at UMD has come to an end. You have been expelled.
               """)
         print("--------------------")
         state.gprint("Aw shucks better luck next time.")
-        sys.exit
+        sys.exit()
        

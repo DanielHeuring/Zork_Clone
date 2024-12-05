@@ -69,14 +69,21 @@ def unlock_chem_lab(state: GameState):
         state.gprint("You can't unlock this door")
 
 def grad_student(state: GameState):
-    print("--------------------")
-    state.gprint("Grad Student: H-hello are you a student of Doctor Buck's?")
-    user_input = state.uinput("> ")
-    if user_input == "yes":
-        state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
-        state.backpack.append({"name": "chemistry key"})
-    else:
-        state.gprint("That's too bad. I wanted other students to succeed.")
+    while True:
+        print("--------------------")
+        state.gprint("Grad Student: H-hello are you a student of Doctor Buck's?")
+        user_input = state.uinput("> ")
+        if user_input == "yes":
+            print("--------------------")
+            state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
+            state.backpack.append({"name": "chemistry key"})
+            break
+        elif "no":
+            print("--------------------") 
+            state.gprint("Grad Student: That's too bad. I wanted other students to succeed.")
+            break
+        else:
+            state.gprint("Grad Student: Huh what was that?")
 
 def frat_guys(state: GameState):
     while True:
@@ -98,13 +105,13 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
             locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find.")
             locations['labovitzfl1']['specialDesc'].update(desc= "Three frat guys sit huddled around a table off to the side.")
             locations['labovitzfl1']['actions'].update(talk= give_key)
-            del locations['underground']['specialDesc']['test']
+            del locations['underground']['specialDesc']['desc']
             del locations['underground']['actions']['talk']
             break
         elif user_input == "no":
             print("--------------------")
             state.gprint("Frat Guy #1: You'll never be accepted into a party during your time at UMD then!!")
-            del locations['underground']['specialDesc']['test']
+            del locations['underground']['specialDesc']['desc']
             del locations['underground']['actions']['talk']
             break
         else:
@@ -176,15 +183,32 @@ def give_key(state: GameState):
             print("--------------------")
             state.gprint("Frat guy #2: Huh what was that? Sounded like gibberish.\n")
 
+def room_mate(state: GameState):
+    print("--------------------")
+    state.gprint("Brad: Leave me alone I'm watching Real House Wives of Beverly Hills")
+
+def open_window(state: GameState):
+    print("--------------------")
+    state.gprint("You see the campus and feel the breeze off Lake Superior.")
+    locations['dorm']['actions'].update(jump_out_window= jump_out)
+
+def jump_out(state: GameState):
+    print("--------------------")
+    state.gprint("You fall to your death. What were you thinking?")
+    state.location = "game_over"
+
+def class_mate():
+    pass
+
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
         "description": "DORM\nBrad is still watching TV. There is a window, a door, and a desk.",
+        "specialDesc": {"desc": "A note on your desk reminds you to meet a classmate in the venden"},
         "exits": {"exit": "dormhall"},
         "actions": {
-            "open window": "You see the campus and feel the breeze off Lake Superior.",
-            "jump out window": "You fall to your death. What were you thinking?",
-            "backpack": "**BACKPACK COMPONENTS**"
+            "open window": open_window,
+            "talk": room_mate
         }
     },
     "dormhall": {
@@ -196,7 +220,7 @@ locations = {
     },
     "LSHdesk": {
         "initialDescription": "***",
-        "description": "You are in front of the LSH office",
+        "description": "You are in front of the LSH office. A long hallway leads north and south but your interst only lays to the south. A sign points east for the main campus and dining center.",
         "exits": {"south": "dormhall", "east": "diningcenter"},
         "actions": {"open door": "Nope",
                    "backpack": "**BACKPACK COMPONENTS**"}
@@ -216,14 +240,14 @@ locations = {
     },
     "rafters": {
         "initialDescription": "***",
-        "description": "You enter a bare white room with some tables",
+        "description": "You enter a bare white room with some tables. There are some doors on the north side.",
         "exits": {"south": "kirby3", "north": "kirbybalcony"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "kirbybalcony": {
         "initialDescription": "***",
-        "description": "You stand on a balcony overlooking a bus stop.",
-        "exits": {"south": "rafters"},
+        "description": "You stand on a balcony overlooking a main entrance to the school with many old chairs around. There is a white hall to the north and stairs that lead down.",
+        "exits": {"south": "rafters", "down": "kirbyplaza2", "north": "kirbyplaza3"},
     },
     "kirbyBall": {
         "intialDescription": "***",
@@ -249,8 +273,8 @@ locations = {
     },
     "multicultural":{
         "initialDescription": "***",
-        "description": "You enter a room with a sitting area and smaller office space, you can not go further.",
-        "exits": {"north": "kirby2"},
+        "description": "You enter almost a lounge area with several sections to it. To the north and south lay sets of doors.",
+        "exits": {"north": "kirby2", "south": "kirbystaircase2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "kirbydesk": {
@@ -262,25 +286,27 @@ locations = {
     "kirbysc": {
         "initialDescription": "***",
         "description": "You stand admidst what must be the busiest hall on campus. To your north there is the student desk. Theres another stairwell going up here with more stairs leading down near one end of the hall. South of you lay another hall.",
-        "exits": {"north": "kirbydesk", "south": "heller1", "down": "underground", "up": "kirbystaircase2"}
+        "specialDesc": {"desc": "You see your classmate sitting at a booth table with several pieces of paper layed before him."},
+        "exits": {"north": "kirbydesk", "south": "heller1", "down": "underground", "up": "kirbystaircase2"},
+        "actions": {"talk": class_mate}
     },
     "underground": {
         "initialDescription": "***",
         "description": "Entering into the underground you notice the low ceilings and what seems like an 80's themed bowling alley.",
         "exits": {"up": "kirbysc", "east": "soloncc"},
-        "specialDesc": {"test": "Standing around a pool table there are three so called frat guy's."},
+        "specialDesc": {"desc": "Standing around a pool table there are three so called frat guy's."},
         "actions": {"talk": frat_guys}
     },
     "kirbyplaza1": {
         "initialDescription": "***",
-        "description": "-----",
+        "description": "You stand in between the lower store and Northern Shores coffee shop. Hallways lead north, south, and east with a staircase going up.",
         "exits": {"south": "kirbydesk", "north": "techcenter","east": "cinahall1","up": "kirbyplaza2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
      "kirbyplaza2": {
         "initialDescription": "***",
         "description": "You are standing outside of the upper UMD store. To your north is the food court and to the south is kirby floor 2.",
-        "exits": {"down": "kirbyplaza1", "south": "kirby2", "north": "foodcourt", "up": "kirbyplaza3"},
+        "exits": {"down": "kirbyplaza1", "south": "kirby2", "north": "foodcourt", "up": "kirbybalcony"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "foodcourt": {
@@ -292,23 +318,23 @@ locations = {
     "NorthofFC": {
         "initialDescription": "***",
         "descritpion": "The food court lies south. There's a staircase and a hall leading east.",
-        "exits": {"south": "foodcourt", "east": "bohannon2"}
+        "exits": {"south": "foodcourt", "east": "bohannon2", "up": "kirbyplaza3"}
     },
     "kirbyplaza3": {
         "initialDescription": "***",
-        "description": "-----",
-        "exits": {"down": "kirbyplaza2"},
+        "description": "You're in a all white hallway that seems almost hospital like. Hallways lead south and east with stairs leading down.",
+        "exits": {"down": "NorthofFC", "east": "bohannon3", "south": "kirbybalcony"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "techcenter": {
         "initialDescription": "***",
-        "description": "Around you theres several benches with tables",
+        "description": "Around you theres several benches with tables. The hallway goes south and north. Another hall is to your east.",
         "exits": {"south": "kirbyplaza1", "north": "thegrind", "east": "bohannon1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "thegrind": {
         "initialDescription": "***",
-        "description": "Needs a description",
+        "description": "Standing in front of a small shop you see halls leading in all directions.",
         "exits": {"south": "techcenter", "north": "outsidekathrynalib", "west": "labovitzfl1", "east": "montague1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
@@ -439,8 +465,7 @@ locations = {
         "description": "This floor feels abandoned, but you notice a light on in a lab.",
         "exits": {"down": "chemistry3", "enter": "lockedchem"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**",
-                    "unlock": unlock_chem_lab},
-        "items": {"bronze key": {"name": "bronze key", "description": "You see a bronze key tossed aside on the ground"}}
+                    "unlock": unlock_chem_lab}
     },
     "lockedchem": {
         "description": "This door is locked find the key.",
@@ -468,7 +493,7 @@ locations = {
     "cinahallgr": {
         "initialDescription": "***",
         "description": "This hallway feels darker than the rest. Doors advertise photography classes.",
-        "exits": {"south": "soloncc", "up": "cinahall1", "north": "humanities2"},
+        "exits": {"south": "soloncc", "up": "cinahall1", "north": "tweedmus"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahall1": {
@@ -489,6 +514,11 @@ locations = {
         "exits": {"down": "cinahall2"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
+    "tweedmus": {
+        "initialDescription": "***",
+        "description": "Standing outside a museum of art inside the campus you see halls running north and south along with one to your east.",
+        "exits": {"south": "cinahallgr", "north": "bohannongr", "east": "humanities2"}
+    },
     "humanities1": {
         "initialDescription": "***",
         "description": "Stretching eastward is a long hallway lined with locked music practice rooms. Vacant classrooms line the other side. There are no windows, and the hallway appears abandoned.",
@@ -498,7 +528,7 @@ locations = {
     "humanities2": {
         "initialDescription": "***",
         "description": "The humanities hall is mostly comprised of music classrooms and offices. Hallways lead in all directions but west.",
-        "exits": {"north": "bohannongr", "west": "cinahallgr", "south": "abanderson2", "east": "webermusic2", "down": "humanities1", "up": "humanities3"},
+        "exits": {"west": "tweedmus", "south": "abanderson2", "east": "webermusic2", "down": "humanities1", "up": "humanities3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "humanities3": {
@@ -539,7 +569,7 @@ locations = {
     "bohannongr": {
         "initialDescription": "***",
         "description": "You notice Bohannon 90, a massive lecture hall. A hallway runs west to Ven Den and also runs north and south.",
-        "exits": {"south": "humanities2", "north": "montaguegr", "west": "venden", "up": "bohannon1"},
+        "exits": {"south": "tweedmus", "north": "montaguegr", "west": "venden", "up": "bohannon1"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "bohannon1": {
@@ -592,7 +622,7 @@ locations = {
     },
     "engineering1": {
         "initialDescription": "***",
-        "description": "Engineering labs line the halls, showcasing senior projects. A tunnel leads somewhere unknown.",
+        "description": "Engineering labs line the halls, showcasing senior projects. A tunnel leads underneath to the library.",
         "specialDesc": "You overhear a group of students say <Wow the test average was really high this time. It was a wopping 57!!>",
         "exits": {"south": "edugr", "north": "civilengfl1sec2", "east": "vosskovach1", "up": "engineering2", "enter": "outsidekathrynalib"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
@@ -619,7 +649,7 @@ locations = {
         "initialDescription": "***",
         "description": "The bottom floor of Voss is tightly sealed. Stairs lead back up but you think you see something in the shadows.",
         "exits": {"up": "vosskovach1"},
-        "specialDesc": "In the corner you see an older student crouched and seems to be crying",
+        "specialDesc": {"desc": "In the corner you see an older student crouched and seems to be crying"},
         "actions": {"talk": grad_student}
     },
     "civilengfl1sec1": {
@@ -734,7 +764,7 @@ locations = {
     "marshallpacfl1": {
         "initialDescription": "***",
         "description": "You can tell the space you are in is intended for public viewing. It is clean and contains unique art. To the west is a hallway that leads to Montague Hall. Stairs lead up to access the upper level of the performance hall, but the doors are shut. Stairs also lead to the basement. A hallway takes you east to the engineering building.",
-        "exits": {"west": "montagueflgr", "down": "marshallpacbs", "up": "marshallpacfl2", "east": "engineering1"},
+        "exits": {"west": "montagueflgr", "down": "marshallpacbs", "up": "marshallpacfl2"},
         "actions": {}
     },
     "marshallpacfl2": {
@@ -820,6 +850,9 @@ locations = {
         "description": "You enter a small room with desk littered with papers.",
         "exits": {"exit": "soloncc"},
         "items": {"exam key": {"name": "exam key", "description": "Peeking out from underneath a pile of other papers you see the big red letters <EXAM KEY>"}}
+    },
+    "game_over": {
+        "description": ""
     }
 } 
 

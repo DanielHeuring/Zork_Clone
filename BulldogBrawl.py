@@ -59,7 +59,6 @@ east = ["east", "e", "go e", "go east", "head east"]
 west = ["west", "w", "go w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
 enter = ["enter", "enter hall", "enter room", "go inside"]
-exitWindow = ["window", "jump out"]
 up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
 backup = ["back", "leave", "go back"]
@@ -71,7 +70,6 @@ exit_aliases = {"north": north,
                 "west": west,
                 "exit": exitDoor,
                 "enter": enter,
-                "window": exitWindow,
                 "up": up_stairs,
                 "down": down_stairs,
                 "back": backup,
@@ -79,17 +77,15 @@ exit_aliases = {"north": north,
                 }
 
 # Action Lists
-backpackNames = ["i", "b", "backpack", "inventory", "back pack", "open backpack", "look in backpack"]
 jumpOutWindow = ["jump out", "jump out window", "exit window", "jump"]
 openWindow = ["open", "open window", "window"]
-unlockDoor = ["unlock door", "unlock"]
+unlockDoor = ["unlock door", "unlock", "open door"]
 meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 talkTo = ["talk", "talk to them", "speak", "speak with"]
 fight = ["fight", "attack", "take exam"]
 
-action_aliases = {"jump out window": jumpOutWindow,
-                 "backpack": backpackNames,
+action_aliases = {"jump_out_window": jumpOutWindow,
                  "open window": openWindow,
                  "unlock": unlockDoor,
                  "acid": meltChains,
@@ -104,6 +100,7 @@ instructions = """
 - Navigate the halls using commands like 'go north', 'go south', 'up', or 'down'.
 - Inspect rooms to find items and uncover hidden details.
 - Use 'grab <item>' to pick up an item after inspecting.
+- Actions in rooms can be 'talk', 'unlock', or 'use <item name>', with more that can be discovered
 - Manage your items using 'backpack' to check what you've collected.
 - Your goal is to explore, find items, and steal the final answer keys.!
         """
@@ -142,11 +139,12 @@ def handle_location(location_name):
     print("--------------------")
 
     current_hall = halls[location_name]
-    current_hall.visit_hall()
+    
+    if location_name =="game_over":
+        state.location = "dorm"
+        menu(state)
 
-    if location_name=="game_over":
-       #menu(state)
-       pass
+    current_hall.visit_hall()
 
     user_input = state.uinput("> ")
     exit_take = get_exit(user_input)    
@@ -173,6 +171,9 @@ def handle_location(location_name):
     elif "backpack" in user_input:
         display_backpack()
 
+    elif "instruction" in user_input:
+        state.gprint(f"{instructions}")
+
     elif exit_take in current_hall.exits:
         new_location = current_hall.exits[exit_take]
         state.changeLocation(new_location)   
@@ -189,6 +190,8 @@ def handle_location(location_name):
 
 # Main Game Loop
 def game_loop(state):
+    print("--------------------")
+    state.gprint("Remmber your goal is to break into Proffesor Buck's office and steal the final exam.")
     while True:
         handle_location(state.location)
 
