@@ -139,10 +139,9 @@ def handle_location(location_name):
     print("--------------------")
 
     current_hall = halls[location_name]
-    
+
     if location_name =="game_over":
-        state.location = "dorm"
-        menu(state)
+        sys.exit()
 
     current_hall.visit_hall()
 
