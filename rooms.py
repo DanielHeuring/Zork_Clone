@@ -9,12 +9,13 @@ global locations
 heller3 = "You are on the top floor of Heller Hall. A door with chains and a vicious dog blocks your way."
 heller3_dog = "Melted chains frame the door but the dog still sits there."
 heller3_chains = "The dog no longer stands in your way but chains block the door still."
+heller3_no_barriers = "Nothing stands in your way to enter now."
 
 def unlock_bucks_acid(state: GameState):
     print("--------------------")
     acid_used = False
     item_used = "acid"
-    prev_exit = locations[state.location]["exits"]["enter"]
+    prev_exit = locations['heller3']["exits"]["enter"]
     for x in range(len(state.backpack) -1,-1,-1):
         item = state.backpack[x]
         if item.get("name") == "beaker of acid":
@@ -23,6 +24,7 @@ def unlock_bucks_acid(state: GameState):
             locations['heller3']["description"].update(desc= heller3_dog)
             acid_used = True
             del state.backpack[x]
+            del locations['heller3']['actions']['acid']
 
     if not acid_used:
         state.gprint("You do not have acid to melt the chains")
@@ -33,7 +35,7 @@ def unlock_bucks_chicken(state: GameState):
     print("--------------------")
     chicken_used = False
     item_used = "chicken"
-    prev_exit = locations[state.location]["exits"]["enter"]
+    prev_exit = locations['heller3']["exits"]["enter"]
     for x in range(len(state.backpack) -1,-1,-1):
         item = state.backpack[x]
         if item.get("name") == "chicken wing":
@@ -52,9 +54,11 @@ def unlock_bucks_chicken(state: GameState):
 def bucks_door_check(state: GameState, item_used, prev_exit):
     if prev_exit == "drbucks_locked_dog" and item_used == "chicken":
         locations['heller3']['exits'].update(enter= "drbucks_office")
+        locations['heller3']["description"].update(desc= heller3_no_barriers)
 
     if prev_exit == "drbucks_locked_chain" and item_used == "acid":
         locations['heller3']['exits'].update(enter= "drbucks_office")
+        locations['heller3']["description"].update(desc= heller3_no_barriers)
 
 def unlock_chem_lab(state: GameState):
     print("--------------------")
@@ -368,16 +372,16 @@ locations = {
     },
     "drbucks_office_locked": {
         "description": "As you approach the door the vicous dog stands and starts to growl",
-        "exits": {"back": "heller3"},
+        "exits": {"exit": "heller3"},
         "actions": {}
     },
     "drbucks_locked_chain": {
         "description": "The door is still securely shut with chains. Find something to break or melt the chains.",
-        "exits": {"back": "heller3"}
+        "exits": {"exit": "heller3"}
     },
     "drbucks_locked_dog": {
         "description": "The dog still stands in your way. Find something to distract it",
-        "exits": {"back": "heller3"}
+        "exits": {"exit": "heller3"}
     },
     "lifescience1": {
         "initialDescription": "***",
