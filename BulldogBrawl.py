@@ -123,6 +123,7 @@ def get_action(user_input):
 
 # Invalid user response for exits and actions
 def invalid_input(user_input, exit_take, action_take):
+    print("--------------------")
     if exit_take in exit_aliases:
         state.gprint("That is not a valid direction here")
     elif action_take in action_aliases:

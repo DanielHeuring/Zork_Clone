@@ -1,4 +1,5 @@
 import GameState
+import sys
 from Blackjack_Battle import blackJack
 global locations
 
@@ -90,13 +91,85 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
     state.gprint("Do you accept the quest to steal the key for them (yes or no)")
     user_input = state.uinput("> ")
     if user_input == "yes":
-        state.gprint("Frat Guy #2: Great! Meet us in Labovitz when you get it.")
+        state.gprint("Frat Guy #2: Great! The office is in soloncc. Meet us in Labovitz when you get it.")
+        locations['soloncc']['actions'].update(unlock= unlock_office)
+        locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find.")
+        locations['labovitzfl1']['specialDesc'].update(desc= "Three frat guys sit huddled around a table off to the side.")
+        locations['labovitzfl1']['actions'].update(talk= give_key)
+        del locations['underground']['specialDesc']['test']
+        del locations['underground']['actions']['talk']
     elif user_input == "no":
         state.gprint("Frat Guy #1: You'll never be accepted into a party during your time at UMD then!!")
+        del locations['underground']['specialDesc']['test']
+        del locations['underground']['actions']['talk']
+    else:
+        state.gprint("That is not a valid response.")
 
-    # Supposed to delete the desc but having problems
-    del locations['underground']['specialDesc']['test']
-    del locations['underground']['actions']['talk']
+def unlock_office(state: GameState):
+    print("--------------------")
+    state.gprint("As you approach the lock you see a sticky note stuck right above the key pad.")
+    state.gprint("The note says - The code to my office is ----math problem----")
+    state.gprint("Attempt to unlock door (yes or no)")
+    attempts = 5
+    user_input = state.uinput("> ")
+    while user_input == "yes" and attempts != 0:
+        print("--------------------")
+        answer = 0
+        state.gprint("Enter the answer")
+        user_answer = state.uinput("> ")
+        try:
+            if int(user_answer) == answer:
+                print("--------------------")
+                state.gprint("BEEP BEEP - CLICK")
+                state.gprint("The door is now unlocked")
+                locations['soloncc']['exits'].update(enter= "math_office")
+                break
+            else:
+                print("--------------------")
+                state.gprint("BEEP BEEP - WRONG")
+                attempts -= 1
+                state.gprint(f"You now have {attempts} attempts remaining")
+        except ValueError:
+            if user_answer == "exit":
+                break
+            else:
+                state.gprint("That is not a number!")
+
+def give_key(state: GameState):
+    while True:
+        print("--------------------")
+        state.gprint("Frat Guy #1: Hey you're here! Do you have the key?\n")
+        state.gprint("Answer (yes or no)")
+        user_input = state.uinput("> ")
+        if user_input == "yes":
+            while True:
+                print("--------------------")
+                state.gprint("Frat Guy #3: Great! Hand it over to us.\n")
+                state.gprint("Give exam key or refuse")
+                user_action = state.uinput("> ")
+                if user_action == "give exam key":
+                    print("--------------------")
+                    state.gprint("Frat Guy #1: You saved us now we'll be able to pass algebra.")
+                    state.backpack.append({"name": "invite"})
+                    locations['dormhall']['exits'].update(south= "offcampus")
+                    return
+                elif user_action == "refuse":
+                    print("--------------------")
+                    state.gprint("Frat Guy #1: What!?!? How dare you!\n")
+                    state.gprint("Frat Guy #3: We're gonna beat you up now!!\n")
+                    state.gprint("After what felt like forever they finally left you with all broken limbs for refusing them. Because of that you went to the hospital and was unable to steal the final exam.\n")
+                    sys.exit()
+                else:
+                    print("--------------------")
+                    state.gprint("Frat Guy #3: Huh what was that?\n")
+        elif user_input == "no":
+            print("--------------------")
+            state.gprint("Frat Guy #2: Why the hell are you wasting our time then?\n")
+            state.gprint("Frat Guy #1: Get out of here loser.\n")
+            break
+        else:
+            print("--------------------")
+            state.gprint("Frat guy #2: Huh what was that? Sounded like gibberish.\n")
 
 locations = {
     "dorm": {
@@ -377,8 +450,9 @@ locations = {
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
+        "specialDesc": {"desc": "On the west side of this hall you see an interesting door with a keypad..."},
         "exits": {"north": "cinahallgr", "east": "darlandadmin", "up": "kirbydesk", "south": "chemistry1", "west": "underground"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "actions": {}
     },
     "darlandadmin": {
         "initialDescription": "***",
@@ -564,6 +638,7 @@ locations = {
     "labovitzfl1": {
         "initialDescription": "***",
         "description": "You are wowed by the architecture of this building. Natural light floods in. Stairs lead to upper floors, and a hallway leads east.",
+        "specialDesc": {},
         "exits": {"east": "thegrind", "up": "labovitzfl2"},
         "actions": {}
     },
@@ -734,6 +809,12 @@ locations = {
         "description": "You enter the planetarium to see a strange machine in the center of a circular room. The only other thing you see is old squeaky chairs.",
         "exits": {"exit": "MWAHgr"},
         "actions": {}
+    },
+    "math_office": {
+        "initialDescription": "***",
+        "description": "You enter a small room with desk littered with papers.",
+        "exits": {"exit": "soloncc"},
+        "items": {"exam key": {"name": "exam key", "description": "Peeking out from underneath a pile of other papers you see the big red letters <EXAM KEY>"}}
     }
 } 
 
