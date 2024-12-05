@@ -104,6 +104,7 @@ instructions = """
 - Use 'grab <item>' to pick up an item after inspecting.
 - Actions in rooms can be 'talk', 'unlock', or 'use <item name>', with more that can be discovered
 - Manage your items using 'backpack' to check what you've collected.
+- Type help into the prompt at anytime to get use commands!
 - Your goal is to explore, find items, and steal the final answer keys.!
         """
 
@@ -112,7 +113,7 @@ help = """
 - Make sure to inspect halls with <inspect>!!!
 - Directional Commands: north, south, west, east, up, down
 - Special Commands: exit, enter, back, backpack
-- Actions: unlock door, use <item name>, talk
+- Actions: use <item name>, talk
 """
 
 # Functions

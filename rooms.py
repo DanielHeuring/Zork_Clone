@@ -25,6 +25,8 @@ def unlock_bucks_acid(state: GameState):
             acid_used = True
             del state.backpack[x]
             del locations['heller3']['actions']['acid']
+            if state.location == "drbucks_office_locked":
+                state.location = "drbucks_locked_dog"
 
     if not acid_used:
         state.gprint("You do not have acid to melt the chains")
@@ -45,6 +47,8 @@ def unlock_bucks_chicken(state: GameState):
             chicken_used = True
             del state.backpack[x]
             del locations['heller3']['actions']['chicken']
+            if state.location == "drbucks_office_locked":
+                state.location = "drbucks_locked_chain"
 
     if not chicken_used:
         state.gprint("You need to find chicken to distract the dog.")
@@ -55,10 +59,12 @@ def bucks_door_check(state: GameState, item_used, prev_exit):
     if prev_exit == "drbucks_locked_dog" and item_used == "chicken":
         locations['heller3']['exits'].update(enter= "drbucks_office")
         locations['heller3']["description"].update(desc= heller3_no_barriers)
+        state.location = "heller3"
 
     if prev_exit == "drbucks_locked_chain" and item_used == "acid":
         locations['heller3']['exits'].update(enter= "drbucks_office")
         locations['heller3']["description"].update(desc= heller3_no_barriers)
+        state.location = "heller3"
 
 def unlock_chem_lab(state: GameState):
     print("--------------------")
@@ -69,6 +75,8 @@ def unlock_chem_lab(state: GameState):
             locations['chemistry4']['exits'].update(enter= "chemistrylab")
             del locations["chemistry4"]["specialDesc"]["desc"]
             item_found = True
+            if state.location == "lockedchem":
+                state.location = "chemistry4"
 
     if not item_found:
         state.gprint("You can't unlock this door")
@@ -154,6 +162,10 @@ def unlock_office(state: GameState):
                 break
             else:
                 state.gprint("That is not a number!")
+    
+    if attempts == 0:
+        state.gprint("You got caught trying to trying to break into the office and was expelled.")
+        sys.exit()
 
 def give_key(state: GameState):
     while True:
@@ -373,15 +385,20 @@ locations = {
     "drbucks_office_locked": {
         "description": "As you approach the door the vicous dog stands and starts to growl",
         "exits": {"exit": "heller3"},
-        "actions": {}
+        "actions": {
+            "acid": unlock_bucks_acid,
+            "chicken": unlock_bucks_chicken
+        }
     },
     "drbucks_locked_chain": {
         "description": "The door is still securely shut with chains. Find something to break or melt the chains.",
-        "exits": {"exit": "heller3"}
+        "exits": {"exit": "heller3"},
+        "actions": {"acid": unlock_bucks_acid}
     },
     "drbucks_locked_dog": {
         "description": "The dog still stands in your way. Find something to distract it",
-        "exits": {"exit": "heller3"}
+        "exits": {"exit": "heller3"},
+        "actions": {"chicken": unlock_bucks_chicken}
     },
     "lifescience1": {
         "initialDescription": "***",
