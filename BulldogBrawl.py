@@ -1,4 +1,5 @@
 import sys
+import time
 from rooms import locations
 from GameState import GameState
 
@@ -33,6 +34,8 @@ class Hall:
                     state.gprint(desc)
             else:
                 state.gprint(self.desc)
+        exits = ", ".join(f"{key}: {value}" for key, value in self.exits.items())
+        state.gprint(exits)
 
     def inspect_hall(self):
         print("--------------------")
@@ -59,6 +62,7 @@ east = ["east", "e", "go e", "go east", "head east"]
 west = ["west", "w", "go w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
 enter = ["enter", "enter hall", "enter room", "go inside"]
+keyPad = ["use keypad", "keypad", "enter code"]
 up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
 backup = ["back", "leave", "go back"]
@@ -73,7 +77,8 @@ exit_aliases = {"north": north,
                 "up": up_stairs,
                 "down": down_stairs,
                 "back": backup,
-                "forward":forward
+                "forward":forward,
+                "keypad": keyPad
                 }
 
 # Action Lists
@@ -104,7 +109,8 @@ instructions = """
 - Use 'grab <item>' to pick up an item after inspecting.
 - Actions in rooms can be 'talk', 'unlock', or 'use <item name>', with more that can be discovered
 - Manage your items using 'backpack' to check what you've collected.
-- Type help into the prompt at anytime to get use commands!
+- Type help into the prompt at anytime to get useful commands!
+- In order to leave the game just type leave game.
 - Your goal is to explore, find items, and steal the final answer keys.!
         """
 
@@ -113,7 +119,8 @@ help = """
 - Make sure to inspect halls with <inspect>!!!
 - Directional Commands: north, south, west, east, up, down
 - Special Commands: exit, enter, back, backpack
-- Actions: use <item name>, talk
+- Actions: use <item name>, talk, grab <item name>
+- In order to leave the game just type leave game.
 """
 
 # Functions
@@ -152,6 +159,7 @@ def handle_location(location_name):
     current_hall = halls[location_name]
 
     if location_name =="game_over":
+        time.sleep(5)
         sys.exit()
 
     current_hall.visit_hall()
@@ -162,6 +170,9 @@ def handle_location(location_name):
 
     if user_input == "inspect":
         current_hall.inspect_hall()
+
+    elif user_input == "leave game":
+        sys.exit()
 
     elif user_input == "help":
         state.gprint(f"{help}")
@@ -177,6 +188,8 @@ def handle_location(location_name):
                 break
             else:
                 state.gprint(f"{user_item} is not a valid item")
+        else:
+            state.gprint(f"I don't know how to grab {user_item}")
 
     elif "backpack" in user_input:
         display_backpack()
@@ -217,6 +230,9 @@ def menu(state):
         game_loop(state)
     elif choice =='2':
         state.gprint(f"{instructions}")
+        menu(state)
+    elif choice == "help":
+        state.gprint(f"{help}")
         menu(state)
     elif choice =='3':
         sys.exit()

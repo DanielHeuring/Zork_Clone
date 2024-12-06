@@ -116,7 +116,7 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
         if user_input == "yes":
             print("--------------------")
             state.gprint("Frat Guy #2: Great! The office is in soloncc. Meet us in Labovitz when you get it.")
-            locations['soloncc']['actions'].update(unlock= unlock_office)
+            locations['soloncc']['actions'].update(keypad= unlock_office)
             locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find.")
             locations['labovitzfl1']['specialDesc'].update(desc= "Three frat guys sit huddled around a table off to the side.")
             locations['labovitzfl1']['actions'].update(talk= give_key)
@@ -220,7 +220,7 @@ def jump_out(state: GameState):
 def class_mate(state: GameState):
     print("--------------------")
     state.gprint("Classmate: Hey! You're finally here. We have a lot of work to do to steal the exam.\n")
-    state.gprint("Classmate: Buck's office is somewhere in heller or life science. Also his door is guarded by a dog and chains. There's talk about an old student of bucks hanging out in the engineering portion of the school and he might have something we need.\n")
+    state.gprint("Classmate: Buck's office is somewhere in heller or life science. Also his door is guarded by a dog and chains. There's talk about an old student of bucks hanging out somewhere in Voss Kovach or the engineering building he might have something we need.\n")
     state.gprint("Classmate: Go find and talk to them and try to get the exam before it's too late.")
     del locations['venden']['specialDesc']["desc"]
     del locations['venden']['actions']['talk']
@@ -228,7 +228,7 @@ def class_mate(state: GameState):
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
-        "description": "DORM\nBrad is still watching TV. There is a window, a door, and a desk.",
+        "description": "Your roomate Brad is watching TV. There is a window, a door, and a desk.",
         "specialDesc": {"desc": "A note on your desk reminds you to meet a classmate in the venden"},
         "exits": {"exit": "dormhall"},
         "actions": {
@@ -245,7 +245,7 @@ locations = {
     },
     "LSHdesk": {
         "initialDescription": "***",
-        "description": "You are in front of the LSH office. A long hallway leads north and south but your interst only lays to the south. A sign points east for the main campus and dining center.",
+        "description": "You are in front of the LSH office. A long hallway leads south towards Ianni. A sign points east for the main campus and dining center.",
         "exits": {"south": "dormhall", "east": "diningcenter"},
         "actions": {"open door": "Nope",
                    "backpack": "**BACKPACK COMPONENTS**"}
@@ -288,7 +288,7 @@ locations = {
     "kirbystaircase2": {
         "initialDescription": "***",
         "description": "Stairs lead up and down. North of you is the Multiculural Center",
-        "exits": {"down": "kirbysc"},
+        "exits": {"down": "kirbysc", "up": "kirbystaircase3", "north": "multicultural"},
     },
     "kirby2": {
         "initialDescription": "***",
@@ -391,12 +391,12 @@ locations = {
         }
     },
     "drbucks_locked_chain": {
-        "description": "The door is still securely shut with chains. Find something to break or melt the chains.",
+        "description": "Trying the door it still is securely shut with chains. Find something to break or melt the chains.",
         "exits": {"exit": "heller3"},
         "actions": {"acid": unlock_bucks_acid}
     },
     "drbucks_locked_dog": {
-        "description": "The dog still stands in your way. Find something to distract it",
+        "description": "You approach the door but the dog still stands in your way. Find something to distract it",
         "exits": {"exit": "heller3"},
         "actions": {"chicken": unlock_bucks_chicken}
     },
@@ -499,7 +499,7 @@ locations = {
                     "use_ckey": unlock_chem_lab}
     },
     "lockedchem": {
-        "description": "This door is locked find the key.",
+        "description": "Standing in the entrance of the lab you try the door but it's locked. Find the key.",
         "exits": {"exit": "chemistry4"},
         "actions": {"use_ckey": unlock_chem_lab}
     },
@@ -512,14 +512,14 @@ locations = {
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
-        "specialDesc": {"desc": "On the west side of this hall you see an interesting door with a keypad..."},
+        "specialDesc": {"desc": "In one of the hallways you see an interesting door with a keypad..."},
         "exits": {"north": "cinahallgr", "east": "darlandadmin", "up": "kirbydesk", "south": "chemistry1", "west": "underground"},
         "actions": {}
     },
     "darlandadmin": {
         "initialDescription": "***",
-        "description": "The doors ahead are locked.",
-        "exits": {"west": "soloncc"},
+        "description": "Trying the doors of the administration you notice them tightly locked. You can go no further.",
+        "exits": {"back": "soloncc"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahallgr": {
