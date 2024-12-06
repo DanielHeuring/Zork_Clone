@@ -499,7 +499,7 @@ locations = {
                     "use_ckey": unlock_chem_lab}
     },
     "lockedchem": {
-        "description": "Standing in the entrance of the lab you try the door but it's locked. Find the key.",
+        "description": "Standing in the entrance of the lab you try the door but it's locked. A Chemistry Key is needed to unlock the door.",
         "exits": {"exit": "chemistry4"},
         "actions": {"use_ckey": unlock_chem_lab}
     },
