@@ -89,7 +89,7 @@ def grad_student(state: GameState):
         if user_input == "yes":
             print("--------------------")
             state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
-            state.gprint("\nYou got the chemistry needed for the lab.")
+            state.gprint("\nYou got the chemistry key needed for the lab.")
             state.backpack.append({"name": "chemistry key"})
             break
         elif "no":
@@ -242,7 +242,7 @@ locations = {
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
         "exits": {"north": "LSHdesk", "enter": "dorm"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"},
-        "items": {"ucard": {"name": "ucard", "description": "You see a Ucard laying face down on the floor"}}
+        "items": {"ucard": {"name": "ucard", "description": "You see a <Ucard> laying face down on the floor"}}
     },
     "LSHdesk": {
         "initialDescription": "***",
@@ -500,15 +500,15 @@ locations = {
                     "use_ckey": unlock_chem_lab}
     },
     "lockedchem": {
-        "description": "Standing in the entrance of the lab you try the door but it's locked. Find the key.",
+        "description": "Standing in the entrance of the lab you try the door but it's locked. A Chemistry Key is needed to unlock the door.",
         "exits": {"exit": "chemistry4"},
         "actions": {"use_ckey": unlock_chem_lab}
     },
     "chemistrylab": {
         "initialDescription": "***",
-        "description": "The lights flicker as you enter the room. Around you there are several tables littered with onjects you don't recognize.",
+        "description": "The lights flicker as you enter the room. Around you there are several tables littered with objects you don't recognize.",
         "exits": {"exit": "chemistry4"},
-        "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what youve come for. The bright green liquid swirling around. A beaker of acid."}}
+        "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what you've come for. The bright green liquid swirling around. A beaker of acid."}}
     },
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
