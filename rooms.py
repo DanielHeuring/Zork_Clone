@@ -505,7 +505,7 @@ locations = {
     },
     "chemistrylab": {
         "initialDescription": "***",
-        "description": "The lights flicker as you enter the room. Around you there are several tables littered with onjects you don't recognize.",
+        "description": "The lights flicker as you enter the room. Around you there are several tables littered with objects you don't recognize.",
         "exits": {"exit": "chemistry4"},
         "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what youve come for. The bright green liquid swirling around. A beaker of acid."}}
     },
