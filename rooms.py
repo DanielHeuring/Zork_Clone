@@ -117,7 +117,8 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
             print("--------------------")
             state.gprint("Frat Guy #2: Great! The office is in soloncc. Meet us in Labovitz when you get it.")
             locations['soloncc']['actions'].update(keypad= unlock_office)
-            locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find.")
+            locations['soloncc']['exits'].update(enter= "mathoffice_locked")
+            locations['soloncc']['specialDesc'].update(desc= "You see the office that the frat guys said to find with a keypad above the door.")
             locations['labovitzfl1']['specialDesc'].update(desc= "Three frat guys sit huddled around a table off to the side.")
             locations['labovitzfl1']['actions'].update(talk= give_key)
             del locations['underground']['specialDesc']['desc']
@@ -135,7 +136,7 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
 
 def unlock_office(state: GameState):
     print("--------------------")
-    state.gprint("As you approach the lock you see a sticky note stuck right above the key pad.")
+    state.gprint("As you look at the keypad more you see a sticky note stuck right above the key pad.")
     state.gprint("The note says - The code to my office is: sin(90)")
     state.gprint("Attempt to unlock door (yes or no)")
     attempts = 5
@@ -514,7 +515,7 @@ locations = {
         "description": "A hallway leads north, and another leads east. Students study intently.",
         "specialDesc": {"desc": "In one of the hallways you see an interesting door with a keypad..."},
         "exits": {"north": "cinahallgr", "east": "darlandadmin", "up": "kirbydesk", "south": "chemistry1", "west": "underground"},
-        "actions": {}
+        "actions": {"keypad": unlock_office}
     },
     "darlandadmin": {
         "initialDescription": "***",
@@ -886,6 +887,11 @@ locations = {
     },
     "game_over": {
         "description": ""
+    },
+    "mathoffice_locked": {
+        "description": "The door is tightly shut. Theres a keypad before you.",
+        "exits": {"exit": "soloncc"},
+        "actions": {"keypad": unlock_office}
     }
 } 
 

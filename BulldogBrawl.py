@@ -62,7 +62,6 @@ east = ["east", "e", "go e", "go east", "head east"]
 west = ["west", "w", "go w", "go west", "head west"]
 exitDoor = ["open door", "exit", "exit room"]
 enter = ["enter", "enter hall", "enter room", "go inside"]
-keyPad = ["use keypad", "keypad", "enter code"]
 up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
 backup = ["back", "leave", "go back"]
@@ -77,8 +76,7 @@ exit_aliases = {"north": north,
                 "up": up_stairs,
                 "down": down_stairs,
                 "back": backup,
-                "forward":forward,
-                "keypad": keyPad
+                "forward":forward
                 }
 
 # Action Lists
@@ -90,6 +88,7 @@ meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 talkTo = ["talk", "talk to them", "speak", "speak with"]
 fight = ["fight", "attack", "take exam"]
+keyPad = ["use keypad", "keypad", "enter code"]
 
 action_aliases = {"jump_out_window": jumpOutWindow,
                  "open window": openWindow,
@@ -98,7 +97,8 @@ action_aliases = {"jump_out_window": jumpOutWindow,
                  "chicken": chickenDog,
                  "talk": talkTo,
                  "fight": fight,
-                 "use_ckey": chemKey
+                 "use_ckey": chemKey,
+                 "keypad": keyPad
                  }
 
 # Instruction Variable
