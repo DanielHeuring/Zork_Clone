@@ -89,7 +89,7 @@ def grad_student(state: GameState):
         if user_input == "yes":
             print("--------------------")
             state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
-            state.gprint("\nYou got the chemistry needed for the lab.")
+            state.gprint("\nYou got the chemistry key needed for the lab.")
             state.backpack.append({"name": "chemistry key"})
             break
         elif "no":
