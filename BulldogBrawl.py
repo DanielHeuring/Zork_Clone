@@ -101,7 +101,7 @@ action_aliases = {"jump_out_window": jumpOutWindow,
                  "use_ckey": chemKey
                  }
 
-# Instruction Variable
+# Instrtion Variable
 instructions = """
 ---------Instructions---------
 - Navigate the halls using commands like 'go north', 'go south', 'up', or 'down'.

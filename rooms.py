@@ -241,7 +241,7 @@ locations = {
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
         "exits": {"north": "LSHdesk", "enter": "dorm"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"},
-        "items": {"ucard": {"name": "ucard", "description": "You see a Ucard laying face down on the floor"}}
+        "items": {"ucard": {"name": "ucard", "description": "You see a <Ucard> laying face down on the floor"}}
     },
     "LSHdesk": {
         "initialDescription": "***",
