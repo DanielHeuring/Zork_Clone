@@ -180,7 +180,7 @@ You are told your time at UMD has come to an end. You have been expelled.
 
 ### ROOMS.PY ###
 
-global locations
+global locations, TA_Awake
 
 # This file contains the large dictionary of halls and their information
 # Also contains the functions relating to the actions taken in each hall/room
@@ -191,6 +191,7 @@ heller3_chains = "The dog no longer stands in your way but chains block the door
 heller3_no_barriers = "Nothing stands in your way to enter now."
 
 isTAActive = True
+TA_Awake = False
 
 ta_desc_asleep = " You look off to the side and see your TA. She looks hungry and exhausted, and is sleeping on a bench outside Dr. Buck’s Office."
 ta_desc_awake = " Your TA is still sitting on the bench outside waiting for you."
@@ -205,8 +206,29 @@ def unlock_bucks_acid(state: GameState):
         if item.get("name") == "beaker of acid":
             state.gprint("Pouring the acid upon the chains they quickly dissolve and fall away.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_dog")
-            locations['heller3']["description"].update(desc= heller3_dog+ta_desc_awake)
             acid_used = True
+            current_enterance = locations['heller3']['exits']['enter']
+            # These three check if she is asleep
+            if current_enterance == "drbucks_office_locked" and TA_Awake == False and isTAActive:
+                locations['heller3']['description'].update(desc= heller3+ta_desc_asleep)
+            elif current_enterance == "drbucks_locked_chain" and TA_Awake == False and isTAActive:
+                locations['heller3']['description'].update(desc= heller3_chains+ta_desc_asleep)
+            elif current_enterance == "drbucks_locked_dog" and TA_Awake == False and isTAActive:
+                locations['heller3']['description'].update(desc= heller3_dog+ta_desc_asleep)
+            # These three check is she is awake and there
+            elif current_enterance == "drbucks_office_locked" and isTAActive and TA_Awake:
+                locations['heller3']['description'].update(desc= heller3+ta_desc_awake)
+            elif current_enterance == "drbucks_locked_chain" and isTAActive and TA_Awake:
+                locations['heller3']['description'].update(desc= heller3_chains+ta_desc_awake)
+            elif current_enterance == "drbucks_locked_dog" and isTAActive and TA_Awake:
+                locations['heller3']['description'].update(desc= heller3_dog+ta_desc_awake)
+            # These three check is she is gone
+            elif current_enterance == "drbucks_office_locked" and isTAActive == False:
+                locations['heller3']['description'].update(desc= heller3)
+            elif current_enterance == "drbucks_locked_chain" and isTAActive == False:
+                locations['heller3']['description'].update(desc= heller3_chains)
+            elif current_enterance == "drbucks_locked_dog" and isTAActive == False:
+                locations['heller3']['description'].update(desc= heller3_dog)
             del state.backpack[x]
             del locations['heller3']['actions']['acid']
             if state.location == "drbucks_office_locked":
@@ -227,7 +249,28 @@ def unlock_bucks_chicken(state: GameState):
         if item.get("name") == "chicken wing":
             state.gprint("Waving the chicken wing in front of the dog you gain its attention. Tossing it aside the dog sprints after it.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_chain")
-            locations['heller3']["description"].update(desc= heller3_chains+ta_desc_awake)
+            current_enterance = locations['heller3']['exits']['enter']
+             # These three check if she is asleep
+            if current_enterance == "drbucks_office_locked" and TA_Awake == False and isTAActive:
+                locations['heller3']['description'].update(desc= heller3+ta_desc_asleep)
+            elif current_enterance == "drbucks_locked_chain" and TA_Awake == False and isTAActive:
+                locations['heller3']['description'].update(desc= heller3_chains+ta_desc_asleep)
+            elif current_enterance == "drbucks_locked_dog" and TA_Awake == False and isTAActive:
+                locations['heller3']['description'].update(desc= heller3_dog+ta_desc_asleep)
+            # These three check is she is awake and there
+            elif current_enterance == "drbucks_office_locked" and isTAActive and TA_Awake:
+                locations['heller3']['description'].update(desc= heller3+ta_desc_awake)
+            elif current_enterance == "drbucks_locked_chain" and isTAActive and TA_Awake:
+                locations['heller3']['description'].update(desc= heller3_chains+ta_desc_awake)
+            elif current_enterance == "drbucks_locked_dog" and isTAActive and TA_Awake:
+                locations['heller3']['description'].update(desc= heller3_dog+ta_desc_awake)
+            # These three check is she is gone
+            elif current_enterance == "drbucks_office_locked" and isTAActive == False:
+                locations['heller3']['description'].update(desc= heller3)
+            elif current_enterance == "drbucks_locked_chain" and isTAActive == False:
+                locations['heller3']['description'].update(desc= heller3_chains)
+            elif current_enterance == "drbucks_locked_dog" and isTAActive == False:
+                locations['heller3']['description'].update(desc= heller3_dog)
             chicken_used = True
             del state.backpack[x]
             del locations['heller3']['actions']['chicken']
@@ -242,17 +285,30 @@ def unlock_bucks_chicken(state: GameState):
 def bucks_door_check(state: GameState, item_used, prev_exit):
     if prev_exit == "drbucks_locked_dog" and item_used == "chicken":
         locations['heller3']['exits'].update(enter= "drbucks_office")
-        locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_awake)
+        current_enterance = locations['heller3']['exits']['enter']
+        if current_enterance == "drbucks_office" and isTAActive and TA_Awake == False:
+            locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_asleep)
+        elif current_enterance == "drbucks_office" and isTAActive and TA_Awake:
+            locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_awake)
+        elif current_enterance == "drbucks_office" and isTAActive == False:
+            locations['heller3']["description"].update(desc= heller3_no_barriers)
         state.location = "heller3"
 
-    if prev_exit == "drbucks_locked_chain" and item_used == "acid":
+    elif prev_exit == "drbucks_locked_chain" and item_used == "acid":
         locations['heller3']['exits'].update(enter= "drbucks_office")
-        locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_awake)
+        current_enterance = locations['heller3']['exits']['enter']
+        if current_enterance == "drbucks_office" and isTAActive and TA_Awake == False:
+            locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_asleep)
+        elif current_enterance == "drbucks_office" and isTAActive and TA_Awake:
+            locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_awake)
+        elif current_enterance == "drbucks_office" and isTAActive == False:
+            locations['heller3']["description"].update(desc= heller3_no_barriers)
         state.location = "heller3"
 
 def ta_talk_1(state: GameState):
     while True:
         print("--------------------")
+        TA_Awake = True
         state.gprint("""
 TA: Dr. Buck! 
 She exclaims, waking and looking around frantically.
@@ -473,15 +529,24 @@ def drunk_guy(state: GameState):
 
 def get_food(state: GameState):
     print("--------------------")
-    state.gprint("Using the Ucard you bought <caesar salad>.")
-    state.backpack.append({"name": "caesar salad"})
-    locations['heller3']['actions'].update(salad= give_food)
+    ucard_found = False
+    for x in range(len(state.backpack) -1,-1,-1):
+        item = state.backpack[x]
+        if item.get("name") == "ucard":
+            state.gprint("Using the Ucard you bought <caesar salad>.")
+            state.backpack.append({"name": "caesar salad"})
+            locations['heller3']['actions'].update(salad= give_food)
+            ucard_found = True
+    if ucard_found == False:
+        state.gprint("Find a ucard to use here!")
+
 
 def give_food(state: GameState):
     global isTAActive
     print("--------------------")
     state.gprint("TA: Thank you so much! I will go eat this in the lounge while I wait on Dr. Buck.")
     del locations['heller3']['actions']['salad']
+    state.backpack.remove({"name": "caesar salad"})
     current_enterance = locations['heller3']['exits']['enter']
     if current_enterance == "drbucks_office_locked":
         locations['heller3']['description'].update(desc= heller3)
@@ -674,7 +739,7 @@ locations = {
     },
     "lifescience1": {
         "initialDescription": "***",
-        "description": "Life Science Floor 1 has large lecture halls. A hallway leads south and east.",
+        "description": "Life Science Floor 1 has large lecture halls. A hallway leads north, south, and east.",
         "exits": {"north": "heller1", "south": "MWAH1", "east": "chemistry2", "up": "lifescience2", "down": "lifesciencegr"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
@@ -758,7 +823,7 @@ locations = {
     },
     "chemistry3": {
         "initialDescription": "***",
-        "description": "There is some caution tape blocking the stairs on the way up.",
+        "description": "There is some caution tape mostly blocking the stairs on the way up.",
         "exits": {"down": "chemistry2", "up": "chemistry4"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
