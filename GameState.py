@@ -4,7 +4,7 @@ class GameState:
     def __init__(self):
         self.location = "heller3"
         self.prevLocation = 0
-        self.backpack = [{"name": "water bottle"}, {"name": "laptop"}]
+        self.backpack = [{"name": "water bottle"}, {"name": "ceaser salad"}]
 
     def gprint(self, string):
         string = string + "\n"

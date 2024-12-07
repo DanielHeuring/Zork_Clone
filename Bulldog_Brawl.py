@@ -475,13 +475,13 @@ def get_food(state: GameState):
     print("--------------------")
     state.gprint("Using the Ucard you bought <ceaser salad>.")
     state.backpack.append({"name": "ceaser salad"})
-    locations['heller3']['actions']['salad']
+    locations['heller3']['actions'].update(salad= give_food)
 
 def give_food(state: GameState):
     global isTAActive
     print("--------------------")
     state.gprint("TA: Thank you so much! I will go eat this in the lounge while I wait on Dr. Buck.")
-    del locations['heller3']['action']['salad']
+    del locations['heller3']['actions']['salad']
     current_enterance = locations['heller3']['exits']['enter']
     if current_enterance == "drbucks_office_locked":
         locations['heller3']['description'].update(desc= heller3)
