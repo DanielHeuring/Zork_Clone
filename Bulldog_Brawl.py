@@ -992,7 +992,7 @@ locations = {
     "engineering1": {
         "initialDescription": "***",
         "description": "Engineering labs line the halls, showcasing senior projects. A tunnel leads underneath to the library.",
-        "specialDesc": "You overhear a group of students say <Wow the test average was really high this time. It was a wopping 57!!>",
+        "specialDesc": {"desc": "You overhear a group of students say <Wow the test average was really high this time. It was a wopping 57!!>"},
         "exits": {"south": "edugr", "north": "civilengfl1sec2", "east": "vosskovach1", "up": "engineering2", "enter": "outsidekathrynalib"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
