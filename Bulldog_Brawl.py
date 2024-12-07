@@ -6,22 +6,26 @@ from time import sleep
 
 # This class is for functions and variables that handle the basic enviroment of the game
 class GameState:
+    # Main game state function
     def __init__(self):
         self.location = "dorm"
         self.prevLocation = 0
         self.backpack = [{"name": "water bottle"}, {"name": "laptop"}]
 
+    # Function for scroll print
     def gprint(self, string):
         string = string + "\n"
         for i in string:
             print(i, end='', flush=True)
             sleep(0.00001) # 0.02 for game
 
+    # Function to take user input
     def uinput(self, string):
         print("\n")
         output = (input(string)).lower().strip()
         return str(output)
     
+    # Function for handling room change
     def changeLocation(self, new_location):
         global prevLocation, state
         prevLocation = self.location
@@ -29,6 +33,7 @@ class GameState:
 
 ### BLACKJACK_BATTLE.PY ###
 
+# Final boss function
 def blackJack(state):
     print("--------------------")
     state.gprint("""
@@ -45,10 +50,12 @@ This game of blackjack is a version where each hand determines who and how much 
     player_Health = 65
     has50 = 0
     print("--------------------")
+    # Checking if TA is there and reduces health
     if isTAActive:
         state.gprint("Your TA followed Dr. Buck in and assists him.")
         state.gprint("Your health will be reduced from 65 to 45 because of this.")
         player_Health = 45
+    # Checks if you can bribe buck
     for x in range(len(state.backpack) -1,-1,-1):
         x = state.backpack[x]
         if x.get("name") == "$50":
@@ -67,6 +74,7 @@ This game of blackjack is a version where each hand determines who and how much 
     if has50 == 0:
         state.gprint("You reach into your bag to find money to bride your way out but there is none.\n")
         
+    # Main boss loop
     while buck_Health>0 and player_Health>0:
         print("--------------------")
         state.gprint(f"Your health is {player_Health} and Dr. Buck's health is {buck_Health}")
@@ -104,6 +112,7 @@ This game of blackjack is a version where each hand determines who and how much 
         state.gprint(f"Your first two cards are {card1[0]} of {card1[1]} and {card3[0]} of {card3[1]} for a total of {hand_val_player}.")
         state.gprint(f"Dr. Buck's first card is the {card2[0]} of {card2[1]}.")
 
+        # Checks hand loop
         while True:
             if hand_val_player<=21:
                     action = input("Do you want to hit or stand? ").strip().lower()
@@ -128,6 +137,7 @@ This game of blackjack is a version where each hand determines who and how much 
                 break
         hand_val_computer += card_values[hidden_card4[0]]
         state.gprint(f"Dr. Buck flips over his hidden card and it is the {hidden_card4[0]} of {hidden_card4[1]} and their new total is {hand_val_computer}.")
+        # Another checks hand loop
         while hand_val_computer <= 21:
             if hand_val_computer <= 17:
                 drawcard = deck.pop()
@@ -154,6 +164,7 @@ This game of blackjack is a version where each hand determines who and how much 
             state.gprint(f"Dr. Buck deals {damage_player} to you.")
         else: 
             state.gprint("Your hand values were the same neither person deals any damage.")
+    # If player wins
     if buck_Health<=0:
         state.gprint("""
 You have defeated Dr. Buck in a game of blackjack. He 
@@ -165,6 +176,7 @@ and are able to move on with your college journey.
         state.gprint("Thank you for playing!!!")
         time.sleep(10)
         sys.exit()
+    # If player loses
     elif player_Health<=0:
         state.gprint("""
 Dr. Buck defeats you in his card game and rips the answer key
@@ -180,11 +192,10 @@ You are told your time at UMD has come to an end. You have been expelled.
 
 ### ROOMS.PY ###
 
+# Two global variables
 global locations, TA_Awake
 
-# This file contains the large dictionary of halls and their information
-# Also contains the functions relating to the actions taken in each hall/room
-
+# Description Variables
 heller3 = "You are on the top floor of Heller Hall. A door with chains and a vicious dog blocks your way."
 heller3_dog = "Melted chains frame the door but the dog still sits there."
 heller3_chains = "The dog no longer stands in your way but chains block the door still."
@@ -196,11 +207,13 @@ TA_Awake = False
 ta_desc_asleep = " You look off to the side and see your TA. She looks hungry and exhausted, and is sleeping on a bench outside Dr. Buck’s Office."
 ta_desc_awake = " Your TA is still sitting on the bench outside waiting for you."
 
+# Function for using acid on door
 def unlock_bucks_acid(state: GameState):
     print("--------------------")
     acid_used = False
     item_used = "acid"
     prev_exit = locations['heller3']["exits"]["enter"]
+    # Checks if acid is in backpack and will change desciptions and actions based off that
     for x in range(len(state.backpack) -1,-1,-1):
         item = state.backpack[x]
         if item.get("name") == "beaker of acid":
@@ -239,11 +252,13 @@ def unlock_bucks_acid(state: GameState):
 
     bucks_door_check(state, item_used, prev_exit)
     
+# Function for using chicken wing for dog
 def unlock_bucks_chicken(state: GameState):
     print("--------------------")
     chicken_used = False
     item_used = "chicken"
     prev_exit = locations['heller3']["exits"]["enter"]
+    # Checks if chicken wing is in backpack and will change desciptions and actions based off that
     for x in range(len(state.backpack) -1,-1,-1):
         item = state.backpack[x]
         if item.get("name") == "chicken wing":
@@ -282,6 +297,7 @@ def unlock_bucks_chicken(state: GameState):
 
     bucks_door_check(state, item_used, prev_exit)
 
+# Function to check if both items were used and will change description/exits/and actions
 def bucks_door_check(state: GameState, item_used, prev_exit):
     if prev_exit == "drbucks_locked_dog" and item_used == "chicken":
         locations['heller3']['exits'].update(enter= "drbucks_office")
@@ -305,6 +321,7 @@ def bucks_door_check(state: GameState, item_used, prev_exit):
             locations['heller3']["description"].update(desc= heller3_no_barriers)
         state.location = "heller3"
 
+# First TA interaction Function
 def ta_talk_1(state: GameState):
     while True:
         print("--------------------")
@@ -316,6 +333,7 @@ TA: Oh, it’s just you. What are you doi–, oh nevermind. I have been waiting 
 """)
         state.gprint("Respond (yes or no)")
         user_input = state.uinput("> ")
+        # This statement will change several things like action/description
         if user_input == "yes":
             print("--------------------")
             state.gprint("TA: Thank you so much! I will be sure to get out of here once you get me some food. Of course, you’ll need a Ucard to pay for it though. Bet you can find someone’s lost Ucard by the dorms.")
@@ -337,6 +355,7 @@ TA: Oh, it’s just you. What are you doi–, oh nevermind. I have been waiting 
             print("--------------------")
             state.gprint("TA: Sorry I'm exhausted what did you say?")
 
+# Function that will unlock the chemistry lab door and change descriptions
 def unlock_chem_lab(state: GameState):
     print("--------------------")
     item_found = False
@@ -352,6 +371,7 @@ def unlock_chem_lab(state: GameState):
     if not item_found:
         state.gprint("You can't unlock this door")
 
+# Function for interaction with grad student
 def grad_student(state: GameState):
     while True:
         print("--------------------")
@@ -371,6 +391,7 @@ def grad_student(state: GameState):
             print("--------------------")
             state.gprint("Grad Student: Huh what was that?")
 
+# Function for when interacting with frat guys in the underground
 def frat_guys(state: GameState):
     while True:
         print("--------------------")
@@ -405,6 +426,7 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
             print("--------------------")
             state.gprint("Frat Guy #3: Huh what was that loser?")
 
+# Function for when trying to get into math office
 def unlock_office(state: GameState):
     print("--------------------")
     state.gprint("As you look at the keypad more you see a sticky note stuck right above the key pad.")
@@ -441,6 +463,7 @@ def unlock_office(state: GameState):
         time.sleep(5)
         sys.exit()
 
+# Function for when interacting with frat guys in labovitz
 def give_key(state: GameState):
     while True:
         print("--------------------")
@@ -477,20 +500,24 @@ def give_key(state: GameState):
             print("--------------------")
             state.gprint("Frat guy #2: Huh what was that? Sounded like gibberish.\n")
 
+# Function for when trying to talk to roomate
 def room_mate(state: GameState):
     print("--------------------")
     state.gprint("Brad: Leave me alone I'm watching Real House Wives of Beverly Hills")
 
+# Function to open window and add an exit
 def open_window(state: GameState):
     print("--------------------")
     state.gprint("You see the campus and feel the breeze off Lake Superior.")
     locations['dorm']['actions'].update(jump_out_window= jump_out)
 
+# Function for when jumping out window
 def jump_out(state: GameState):
     print("--------------------")
     state.gprint("You fall to your death. What were you thinking?")
     state.location = "game_over"
 
+# Function to help find direction in the game through classmate
 def class_mate(state: GameState):
     print("--------------------")
     state.gprint("Classmate: Hey! You're finally here. We have a lot of work to do to steal the exam.\n")
@@ -499,6 +526,7 @@ def class_mate(state: GameState):
     del locations['venden']['specialDesc']["desc"]
     del locations['venden']['actions']['talk']
 
+# Function to use invite at fat house.
 def use_invite(state: GameState):
     print("--------------------")
     state.gprint("You flash the invite, and his skeptical look shifts to a nod as he steps aside, letting the pounding bass and a wave of warm, chaotic energy spill out to greet you.")
@@ -506,10 +534,12 @@ def use_invite(state: GameState):
     if state.location == 'locked_house':
         state.location = 'offcampus'
 
+# Function for another drunk guy to talk to
 def drunk_guy2(state: GameState):
     print("--------------------")
     state.gprint("Another drunk guy speaks incoherent sentences to you.")
 
+# Function to talk to frat guy to get $50
 def drunk_guy(state: GameState):
     while True:
         print("--------------------")
@@ -532,6 +562,7 @@ def drunk_guy(state: GameState):
             state.gprint("Drunk Guy: I'm way to drunk right now man. What was that?\n")
     locations["frathouse"]['actions'].update(talk= drunk_guy2)
 
+# Function for getting food from the grind
 def get_food(state: GameState):
     print("--------------------")
     ucard_found = False
@@ -545,7 +576,7 @@ def get_food(state: GameState):
     if ucard_found == False:
         state.gprint("Find a ucard to use here!")
 
-
+# Function for when giving the food to the TA
 def give_food(state: GameState):
     global isTAActive
     print("--------------------")
@@ -563,14 +594,19 @@ def give_food(state: GameState):
         locations['heller3']['description'].update(desc= heller3_no_barriers)
     isTAActive = False
 
-    
-
+# This dictionary holds all room values that the Halls calss pulls from
 locations = {
+    # This name is how exits find where to go
     "dorm": {
+        # Initial description is no longer used in the game but was meant to be printed when first visiting the hall
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
+        # Description holds the string value of the hall that gets printed when entering
         "description": "Your roomate Brad is watching TV. There is a window, a door, and a desk.",
+        # This holds the exits that can be taken and the location that it will take you too. It is found by the name
         "exits": {"exit": "dormhall"},
+        # Items hold description when inspect is used and the name that gets printed and used to grab
         "items": {"note": {"name": "note", "description": "A <note> on your desk reminds you to meet a classmate in the venden"}},
+        # actions old the command used to get along with the function that holds the action changes
         "actions": {
             "open window": open_window,
             "talk": room_mate
@@ -851,7 +887,7 @@ locations = {
         "exits": {"exit": "chemistry4"},
         "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what you've come for. The bright green liquid swirling around. A <beaker of acid>."}}
     },
-    "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
+    "soloncc": {
         "initialDescription": "***",
         "description": "A hallway leads north, and another leads east. Students study intently.",
         "specialDesc": {"desc": "In one of the hallways you see an interesting door with a keypad..."},
@@ -1257,6 +1293,7 @@ class Hall:
         self.visited = False
         self.inspected = False
 
+    # Function to change hall to visited
     def visit_hall(self):
         if not self.visited:
             self.visited = True
@@ -1276,6 +1313,7 @@ class Hall:
         exits = ", ".join(f"{key}: {value}" for key, value in self.exits.items())
         state.gprint(exits)
 
+    # Function used to print item descriptions or special descriptions
     def inspect_hall(self):
         print("--------------------")
         self.inspected = True
@@ -1285,8 +1323,6 @@ class Hall:
         if self.special_desc:
             for desc in self.special_desc.values():
                 state.gprint(desc)
-                
-            #state.gprint(self.special_desc)
 
         elif len(self.items) == 0:
             state.gprint("Nothing catches your eye") 
@@ -1294,7 +1330,7 @@ class Hall:
 # Initialize Halls with location Dict
 halls = {key: Hall(data) for key, data in locations.items()}
 
-# Exit Aliases
+# Exit Aliases - All inputs for certain commands
 north = ["north", "n", "go n", "go north", "head north"]
 south = ["south", "s", "go s", "go south", "head south"]
 east = ["east", "e", "go e", "go east", "head east"]
@@ -1306,6 +1342,7 @@ down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
 backup = ["back", "leave", "go back"]
 forward = ["foward", "f", "go foward"]
 
+# references inputs to one string that connects to exits in locations
 exit_aliases = {"north": north,
                 "south": south,
                 "east": east,
@@ -1331,6 +1368,7 @@ useInvite = ["give invite", "use invite", "throw invite"]
 useUcard = ["use ucard", "get food", "buy food"]
 giveSalad = ["use caesar salad", "give caesar salad", "give salad", "use salad"]
 
+# references inputs to one string that connects to actions in locations
 action_aliases = {"jump_out_window": jumpOutWindow,
                  "open window": openWindow,
                  "unlock": unlockDoor,
@@ -1357,6 +1395,7 @@ instructions = """
 - Your goal is to explore, find items, and steal the final answer keys.!
         """
 
+# Help Variable
 help = """
                 ----------HELP---------
 - inspect    >  inspects current room or hall
@@ -1370,13 +1409,14 @@ help = """
 
 """
 
-# Functions
+# This function goes through the exits aliases
 def get_exit(user_input):
     for exit, aliases in exit_aliases.items():
         if user_input in aliases:
             return exit
     return None
 
+# This Function goes through the actions aliases
 def get_action(user_input):
     for action, aliases in action_aliases.items():
         if user_input in aliases:
@@ -1404,27 +1444,35 @@ def display_backpack():
 def handle_location(location_name):
     print("--------------------")
 
+    # Turns location name to current hall
     current_hall = halls[location_name]
 
+    # Checks if location is game over which kills program
     if location_name =="game_over":
         time.sleep(5)
         sys.exit()
 
+    # Calls visit hall - This is what action prints things
     current_hall.visit_hall()
 
+    # Takes inputs and refernces them
     user_input = state.uinput("> ")
     exit_take = get_exit(user_input)    
     action_take = get_action(user_input)
 
+    # Special command - will use the inspect hall function to view things
     if user_input == "inspect":
         current_hall.inspect_hall()
 
+    # Special command - exits program
     elif user_input == "leave game":
         sys.exit()
 
+    # Special command to print the help variable
     elif user_input == "help":
         state.gprint(f"{help}")
         
+    # Statement to grab items in hall
     elif "grab" in user_input and current_hall.inspected:
         user_item = user_input.split("grab ")[-1]
         for item in current_hall.items.values():
@@ -1439,16 +1487,20 @@ def handle_location(location_name):
         else:
             state.gprint(f"I don't know how to grab {user_item}")
 
+    # Statement for printing backpack
     elif "backpack" in user_input:
         display_backpack()
 
+    # Prints instructions variable
     elif "instruction" in user_input:
         state.gprint(f"{instructions}")
 
+    # Uses the exit direction to change location with function
     elif exit_take in current_hall.exits:
         new_location = current_hall.exits[exit_take]
         state.changeLocation(new_location)   
 
+    # Uses action taken to do action things
     elif action_take in current_hall.actions:
         result = current_hall.actions.get(action_take)
         if isinstance(result, str):
@@ -1456,6 +1508,7 @@ def handle_location(location_name):
         else:
             result(state)
             
+    # Invalid user input
     else:
         invalid_input(user_input, exit_take, action_take)
 
@@ -1489,6 +1542,7 @@ def menu(state):
                        ███    ███                          ▀                           
 """)
     
+    # Prints options
     state.gprint("""\033[1m
     1. Play Game
     2. Instructions
@@ -1509,4 +1563,5 @@ def menu(state):
     else:
         state.gprint("Invalid input")
 
+# Calls menu
 menu(state)
