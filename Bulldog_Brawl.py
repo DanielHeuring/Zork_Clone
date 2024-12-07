@@ -506,10 +506,14 @@ def use_invite(state: GameState):
     if state.location == 'locked_house':
         state.location = 'offcampus'
 
+def drunk_guy2(state: GameState):
+    print("--------------------")
+    state.gprint("Another drunk guy speaks incoherent sentences to you.")
+
 def drunk_guy(state: GameState):
-     while True:
+    while True:
         print("--------------------")
-        state.gprint("Drunk Guy: $50 and my sunglasses?\n")
+        state.gprint("Drunk Guy: $50 and my sunglasses for your bottle?\n")
         state.gprint("Answer (sure or no way)")
         user_input = state.uinput("> ")
         if user_input == "sure":
@@ -526,6 +530,7 @@ def drunk_guy(state: GameState):
         else:
             print("--------------------")
             state.gprint("Drunk Guy: I'm way to drunk right now man. What was that?\n")
+    locations["frathouse"]['actions'].update(talk= drunk_guy2)
 
 def get_food(state: GameState):
     print("--------------------")
@@ -1186,7 +1191,7 @@ locations = {
     },
     "offcampus": {
         "initialDescription": "***",
-        "description": "You arrive off campus at an old rundown house. You can hear music playing. Your friend invites you in.",
+        "description": "You arrive off campus at an old rundown house. You can hear music playing from inside.",
         "exits": {"enter": "locked_house", "exit": "dormhall"},
         "actions": {"invite": use_invite}
     },
