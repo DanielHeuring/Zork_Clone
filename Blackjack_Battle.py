@@ -1,6 +1,7 @@
 import random
 import time
 import sys
+from rooms import isTAActive
 from GameState import GameState
 def blackJack(state):
     print("--------------------")
@@ -18,6 +19,10 @@ This game of blackjack is a version where each hand determines who and how much 
     player_Health = 65
     has50 = 0
     print("--------------------")
+    if isTAActive:
+        state.gprint("Your TA followed Dr. Buck in and assists him.")
+        state.gprint("Your health will be reduced from 65 to 45 because of this.")
+        player_Health = 45
     for x in range(len(state.backpack) -1,-1,-1):
         x = state.backpack[x]
         if x.get("name") == "$50":

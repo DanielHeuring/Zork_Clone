@@ -12,6 +12,11 @@ heller3_dog = "Melted chains frame the door but the dog still sits there."
 heller3_chains = "The dog no longer stands in your way but chains block the door still."
 heller3_no_barriers = "Nothing stands in your way to enter now."
 
+isTAActive = True
+
+ta_desc_asleep = " You look off to the side and see your TA. She looks hungry and exhausted, and is sleeping on a bench outside Dr. Buck’s Office."
+ta_desc_awake = " Your TA is still sitting on the bench outside waiting for you."
+
 def unlock_bucks_acid(state: GameState):
     print("--------------------")
     acid_used = False
@@ -22,7 +27,7 @@ def unlock_bucks_acid(state: GameState):
         if item.get("name") == "beaker of acid":
             state.gprint("Pouring the acid upon the chains they quickly dissolve and fall away.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_dog")
-            locations['heller3']["description"].update(desc= heller3_dog)
+            locations['heller3']["description"].update(desc= heller3_dog+ta_desc_awake)
             acid_used = True
             del state.backpack[x]
             del locations['heller3']['actions']['acid']
@@ -44,7 +49,7 @@ def unlock_bucks_chicken(state: GameState):
         if item.get("name") == "chicken wing":
             state.gprint("Waving the chicken wing in front of the dog you gain its attention. Tossing it aside the dog sprints after it.")
             locations['heller3']['exits'].update(enter= "drbucks_locked_chain")
-            locations['heller3']["description"].update(desc= heller3_chains)
+            locations['heller3']["description"].update(desc= heller3_chains+ta_desc_awake)
             chicken_used = True
             del state.backpack[x]
             del locations['heller3']['actions']['chicken']
@@ -59,13 +64,44 @@ def unlock_bucks_chicken(state: GameState):
 def bucks_door_check(state: GameState, item_used, prev_exit):
     if prev_exit == "drbucks_locked_dog" and item_used == "chicken":
         locations['heller3']['exits'].update(enter= "drbucks_office")
-        locations['heller3']["description"].update(desc= heller3_no_barriers)
+        locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_awake)
         state.location = "heller3"
 
     if prev_exit == "drbucks_locked_chain" and item_used == "acid":
         locations['heller3']['exits'].update(enter= "drbucks_office")
-        locations['heller3']["description"].update(desc= heller3_no_barriers)
+        locations['heller3']["description"].update(desc= heller3_no_barriers+ta_desc_awake)
         state.location = "heller3"
+
+def ta_talk_1(state: GameState):
+    while True:
+        print("--------------------")
+        state.gprint("""
+TA: Dr. Buck! 
+She exclaims, waking and looking around frantically.
+TA: Oh, it’s just you. What are you doi–, oh nevermind. I have been waiting for Dr. Buck to show up to our meeting for days. Can you please get me some food from The Grind, I’m practically starving.
+""")
+        state.gprint("Respond (yes or no)")
+        user_input = state.uinput("> ")
+        if user_input == "yes":
+            print("--------------------")
+            state.gprint("TA: Thank you so much! I will be sure to get out of here once you get me some food. Of course, you’ll need a Ucard to pay for it though. Bet you can find someone’s lost Ucard by the dorms.")
+            current_enterance = locations['heller3']['exits']['enter']
+            if current_enterance == "drbucks_office_locked":
+                locations['heller3']['description'].update(desc= heller3+ta_desc_awake)
+            elif current_enterance == "drbucks_locked_chain":
+                locations['heller3']['description'].update(desc= heller3_chains+ta_desc_awake)
+            elif current_enterance == "drbucks_locked_dog":
+                locations['heller3']['description'].update(desc= heller3_dog+ta_desc_awake)
+            else:
+                locations['heller3']['description'].update(desc= heller3_no_barriers+ta_desc_awake)
+            break
+        elif user_input == "no":
+            print("--------------------")
+            state.gprint("TA: Well I will be editing your grades for the last lab then! And I’m not going anywhere. You better not be up to anything, I’m watching you.")
+            break
+        else:
+            print("--------------------")
+            state.gprint("TA: Sorry I'm exhausted what did you say?")
 
 def unlock_chem_lab(state: GameState):
     print("--------------------")
@@ -152,6 +188,7 @@ def unlock_office(state: GameState):
                 print("--------------------")
                 state.gprint("BEEP BEEP - CLICK")
                 state.gprint("The door is now unlocked")
+                state.location = 'soloncc'
                 locations['soloncc']['exits'].update(enter= "math_office")
                 break
             else:
@@ -255,6 +292,30 @@ def drunk_guy(state: GameState):
         else:
             print("--------------------")
             state.gprint("Drunk Guy: I'm way to drunk right now man. What was that?\n")
+
+def get_food(state: GameState):
+    print("--------------------")
+    state.gprint("Using the Ucard you bought <ceaser salad>.")
+    state.backpack.append({"name": "ceaser salad"})
+    locations['heller3']['actions']['salad']
+
+def give_food(state: GameState):
+    global isTAActive
+    print("--------------------")
+    state.gprint("TA: Thank you so much! I will go eat this in the lounge while I wait on Dr. Buck.")
+    del locations['heller3']['action']['salad']
+    current_enterance = locations['heller3']['exits']['enter']
+    if current_enterance == "drbucks_office_locked":
+        locations['heller3']['description'].update(desc= heller3)
+    elif current_enterance == "drbucks_locked_chain":
+        locations['heller3']['description'].update(desc= heller3_chains)
+    elif current_enterance == "drbucks_locked_dog":
+        locations['heller3']['description'].update(desc= heller3_dog)
+    else:
+        locations['heller3']['description'].update(desc= heller3_no_barriers)
+    isTAActive = False
+
+    
 
 locations = {
     "dorm": {
@@ -391,7 +452,8 @@ locations = {
         "initialDescription": "***",
         "description": "Standing in front of a small shop you see halls leading in all directions.",
         "exits": {"south": "techcenter", "north": "outsidekathrynalib", "west": "labovitzfl1", "east": "montague1"},
-        "actions": {"backpack": "**BACKPACK COMPONENTS**"}
+        "actions": {"backpack": "**BACKPACK COMPONENTS**",
+                    "useUcard": get_food}
     },
     "heller1": {
         "initialDescription": "***",
@@ -407,11 +469,12 @@ locations = {
     },
     "heller3": {
         "initialDescription": "***",
-        "description": {"desc": heller3},
+        "description": {"desc": heller3+ta_desc_asleep},
         "exits": {"down": "heller2", "enter": "drbucks_office_locked", "south": "lifescience3"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**",
                     "acid": unlock_bucks_acid,
-                    "chicken": unlock_bucks_chicken}
+                    "chicken": unlock_bucks_chicken,
+                    "talk": ta_talk_1}
     },
     "drbucks_office_locked": {
         "description": "As you approach the door the vicous dog stands and starts to growl",

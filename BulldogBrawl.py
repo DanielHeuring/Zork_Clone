@@ -89,6 +89,8 @@ chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 talkTo = ["talk", "talk to them", "speak", "speak with"]
 keyPad = ["use keypad", "keypad", "enter code"]
 useInvite = ["give invite", "use invite", "throw invite"]
+useUcard = ["use ucard", "get food", "buy food"]
+giveSalad = ["use ceaser salad", "give ceaser salad", "give salad", "use salad"]
 
 action_aliases = {"jump_out_window": jumpOutWindow,
                  "open window": openWindow,
@@ -98,7 +100,9 @@ action_aliases = {"jump_out_window": jumpOutWindow,
                  "talk": talkTo,
                  "use_ckey": chemKey,
                  "keypad": keyPad,
-                 "invite": useInvite
+                 "invite": useInvite,
+                 "useUcard": useUcard,
+                 "salad": giveSalad
                  }
 
 # Instrtion Variable
