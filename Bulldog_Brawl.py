@@ -1224,12 +1224,12 @@ class Hall:
 # Initialize Halls with location Dict
 halls = {key: Hall(data) for key, data in locations.items()}
 
-# Exits
+# Exit Aliases
 north = ["north", "n", "go n", "go north", "head north"]
 south = ["south", "s", "go s", "go south", "head south"]
 east = ["east", "e", "go e", "go east", "head east"]
 west = ["west", "w", "go w", "go west", "head west"]
-exitDoor = ["open door", "exit", "exit room"]
+exitDoor = ["open door", "exit", "exit room", "back", "backup"]
 enter = ["enter", "enter hall", "enter room", "go inside"]
 up_stairs = ["u", "go up", "go u", "up stairs", "go up stairs", "up"]
 down_stairs = ["d", "go down", "go d", "down stairs", "go down stairs", "down"]
