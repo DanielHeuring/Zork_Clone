@@ -1493,9 +1493,11 @@ def menu(state):
         game_loop(state)
     elif choice =='2':
         state.gprint(f"{instructions}")
+        time.sleep(10)
         menu(state)
     elif choice == "help":
         state.gprint(f"{help}")
+        time.sleep(10)
         menu(state)
     elif choice =='3':
         sys.exit()
