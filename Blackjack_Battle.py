@@ -1,11 +1,13 @@
 import random
 import time
 import sys
+from GameState import GameState
 def blackJack(state):
+    print("--------------------")
     state.gprint("""
 He questions you on what you are doing in his office until he notices the answer key in your hand.
 You attempt to run but the door slams shut and you cannot pry in open. You turn
-around and Dr. Buck has a deck of cards on his deck and asks if you want to play.
+around and Dr. Buck has a deck of cards on his desk  and asks if you want to play.
 He challanges you to a game of blackjack.
 ---hint---
 This game of blackjack is a version where each hand determines who and how much damage is dealt. Your goal is to reduce Dr. Buck's health from 50 to zero before he does the same to your 65 health. Winning a hand deals damage to Dr. Buck based on the difference in card values, while losing means you take the damage. Strategically decide when to hit or stand, and avoid busting to ensure your survival!
@@ -14,7 +16,28 @@ This game of blackjack is a version where each hand determines who and how much 
     #Intial Health Values
     buck_Health = 50
     player_Health = 65
+    has50 = 0
+    print("--------------------")
+    for x in range(len(state.backpack) -1,-1,-1):
+        x = state.backpack[x]
+        if x.get("name") == "$50":
+            has50 += 1
+            state.gprint("Bribe Dr. Buck? (yes or no)")
+            user_input = state.uinput("> ")
+            if user_input == "yes":
+                buck_Health = 40
+                state.gprint("Dr. Buck takes the bait and his decreases from 50 to 40.")
+            elif user_input == "no":
+                pass
+            else:
+                state.gprint("Please enter a valid input.")
+        else:
+            pass
+    if has50 == 0:
+        state.gprint("You reach into your bag to find money to bride your way out but there is none.\n")
+        
     while buck_Health>0 and player_Health>0:
+        print("--------------------")
         state.gprint(f"Your health is {player_Health} and Dr. Buck's health is {buck_Health}")
         #Resets variables for new round
         aces = 0

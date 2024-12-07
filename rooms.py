@@ -1,5 +1,6 @@
 import GameState
 import sys
+import time
 from Blackjack_Battle import blackJack
 global locations
 
@@ -88,7 +89,7 @@ def grad_student(state: GameState):
         user_input = state.uinput("> ")
         if user_input == "yes":
             print("--------------------")
-            state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake of other. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
+            state.gprint("Grad Student: He always creates extreme exams. Please go to his office and get the Final Exam for the sake the others. Here's a key to a lab on the fourth floor of the chemistry building. There's acid in there that can melt straight through the chains on his door.")
             state.gprint("\nYou got the chemistry key needed for the lab.")
             state.backpack.append({"name": "chemistry key"})
             break
@@ -108,7 +109,7 @@ Frat Guy #1: Are you sure it's there?\n
 Frat Guy #2: Trust me bro it's in that office.\n
 Frat Guy #3: I heard it was password protected by a complex equation though..\n
 Frat Guy #2: Hey you there you seem smart.\n
-Frat Guy #3: Yeah do use a favor. Break into our math teacher's office for us.\n
+Frat Guy #3: Yeah do us a favor. Break into our math teacher's office for us.\n
 Frat Guy #1: If you steal the exam key we'll put you on the list for our next party.\n
                     """)
         state.gprint("Do you accept the quest to steal the key for them (yes or no)")
@@ -132,14 +133,14 @@ Frat Guy #1: If you steal the exam key we'll put you on the list for our next pa
             break
         else:
             print("--------------------")
-            state.gprint("That is not a valid response.")
+            state.gprint("Frat Guy #3: Huh what was that loser?")
 
 def unlock_office(state: GameState):
     print("--------------------")
     state.gprint("As you look at the keypad more you see a sticky note stuck right above the key pad.")
     state.gprint("The note says - The code to my office is: sin(90)")
     state.gprint("Attempt to unlock door (yes or no)")
-    attempts = 5
+    attempts = 3
     user_input = state.uinput("> ")
     while user_input == "yes" and attempts != 0:
         print("--------------------")
@@ -165,7 +166,8 @@ def unlock_office(state: GameState):
                 state.gprint("That is not a number!")
     
     if attempts == 0:
-        state.gprint("You got caught trying to trying to break into the office and was expelled.")
+        state.gprint("You got caught trying to trying to break into the office and were expelled.")
+        time.sleep(5)
         sys.exit()
 
 def give_key(state: GameState):
@@ -182,7 +184,7 @@ def give_key(state: GameState):
                 user_action = state.uinput("> ")
                 if user_action == "give exam key":
                     print("--------------------")
-                    state.gprint("Frat Guy #1: You saved us now we'll be able to pass algebra.")
+                    state.gprint("Frat Guy #1: You saved us now we'll be able to pass algebra.\nFrat Guy #2: Here's an invite to our next party! Our house is off campus, south of the dorms.")
                     state.backpack.append({"name": "invite"})
                     locations['dormhall']['exits'].update(south= "offcampus")
                     return
@@ -226,12 +228,40 @@ def class_mate(state: GameState):
     del locations['venden']['specialDesc']["desc"]
     del locations['venden']['actions']['talk']
 
+def use_invite(state: GameState):
+    print("--------------------")
+    state.gprint("You flash the invite, and his skeptical look shifts to a nod as he steps aside, letting the pounding bass and a wave of warm, chaotic energy spill out to greet you.")
+    locations["offcampus"]["exits"].update(enter= "frathouse")
+    if state.location == 'locked_house':
+        state.location = 'offcampus'
+
+def drunk_guy(state: GameState):
+     while True:
+        print("--------------------")
+        state.gprint("Drunk Guy: $50 and my sunglasses?\n")
+        state.gprint("Answer (sure or no way)")
+        user_input = state.uinput("> ")
+        if user_input == "sure":
+            print("--------------------")
+            state.gprint("Drunk Guy: Sweet man.\n")
+            state.backpack.append({"name": "$50"})
+            state.backpack.append({"name": "Drunk Guy's sunglasses"})
+            state.backpack.remove({"name": "water bottle"})
+            break
+        elif user_input == "no way":
+            print("--------------------")
+            state.gprint("Drunk Guy: Dammit. I really needed that vodka.")
+            break
+        else:
+            print("--------------------")
+            state.gprint("Drunk Guy: I'm way to drunk right now man. What was that?\n")
+
 locations = {
     "dorm": {
         "initialDescription": "You are standing in your dorm. Your roommate, Brad, is watching TV on his bed. In your room there is a door, a window, and your desk.",
         "description": "Your roomate Brad is watching TV. There is a window, a door, and a desk.",
-        "specialDesc": {"desc": "A note on your desk reminds you to meet a classmate in the venden"},
         "exits": {"exit": "dormhall"},
+        "items": {"note": {"name": "note", "description": "A <note> on your desk reminds you to meet a classmate in the venden"}},
         "actions": {
             "open window": open_window,
             "talk": room_mate
@@ -242,7 +272,7 @@ locations = {
         "description": "You've made your way to the main dorm hallway. You see a sign for the LSH office to the north.",
         "exits": {"north": "LSHdesk", "enter": "dorm"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"},
-        "items": {"ucard": {"name": "ucard", "description": "You see a <Ucard> laying face down on the floor"}}
+        "items": {"ucard": {"name": "ucard", "description": "You see a <ucard> laying face down on the floor"}}
     },
     "LSHdesk": {
         "initialDescription": "***",
@@ -508,7 +538,7 @@ locations = {
         "initialDescription": "***",
         "description": "The lights flicker as you enter the room. Around you there are several tables littered with objects you don't recognize.",
         "exits": {"exit": "chemistry4"},
-        "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what you've come for. The bright green liquid swirling around. A beaker of acid."}}
+        "items": {"beaker of acid": {"name": "beaker of acid", "description": "Across the room you see what you've come for. The bright green liquid swirling around. A <beaker of acid>."}}
     },
     "soloncc": {    #will need to make a "special_room", needs wedge and missing 4-5 exits.
         "initialDescription": "***",
@@ -520,7 +550,7 @@ locations = {
     "darlandadmin": {
         "initialDescription": "***",
         "description": "Trying the doors of the administration you notice them tightly locked. You can go no further.",
-        "exits": {"back": "soloncc"},
+        "exits": {"exit": "soloncc"},
         "actions": {"backpack": "**BACKPACK COMPONENTS**"}
     },
     "cinahallgr": {
@@ -840,8 +870,7 @@ locations = {
     "drbucks_office": {
         "initialDescription": "***",
         "description": "You have managed to break into Dr. Buck's office. His desk is riddled with papers. You notice a bottle on the desk labeled 'Tears of Previous Students'. Your body shakes as your nerves increase. You finally find what you are looking for, a briefcase labeled 'Final Exam'. You open it up and find the answer key. Just as you are about to leave, Dr. Buck enters the room.",
-        "exits": {"exit": "heller3"},
-        "actions": {"fight": blackJack}
+        "actions": {"talk": blackJack}
     },
     "drbuck_confrontation": {
         "initialDescription": "***",
@@ -852,14 +881,19 @@ locations = {
     "offcampus": {
         "initialDescription": "***",
         "description": "You arrive off campus at an old rundown house. You can hear music playing. Your friend invites you in.",
-        "exits": {"enter": "in_the_house", "back": "dormhall"},
-        "actions": {}
+        "exits": {"enter": "locked_house", "exit": "dormhall"},
+        "actions": {"invite": use_invite}
     },
-    "in_the_house": {
-        "initialDescription": "***",
-        "description": "You step inside the front door and are handed a beverage you have never even heard of. People are talking all around you. You walk over a rug and are unsure what the original color is.",
+    "locked_house": {
+        "description": "You step up to the door, but before you can cross the threshold, a tall guy in a backwards cap blocks your way, his voice cutting through the music as he asks, 'Who do you know here?' while the muffled bass thumps just out of reach behind him.",
         "exits": {"exit": "offcampus"},
-        "actions": {}
+        "actions": {"invite": use_invite}
+    },
+    "frathouse": {
+        "initialDescription": "***",
+        "description": "You step into the dimly lit frat house, and the heavy bass of the music hits you like a wave, vibrating through your chest. You see people packed into every corner, red solo cups in hand, their laughter and voices blending into a chaotic hum. The air smells like a mix of spilled beer, sweat, and cheap cologne. Flashing LED lights sweep across the room, illuminating a crowd cheering around a beer pong table. You hear the smack of a ping pong ball, shouts of victory, and the faint buzz of someone singing off-key in the distance. One very drunk guy stumbled up to you looking to talk.",
+        "exits": {"exit": "offcampus"},
+        "actions": {"talk": drunk_guy}
     },
     "pit": {
         "initialDescription": "***",

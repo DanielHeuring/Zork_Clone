@@ -87,8 +87,8 @@ chemKey = ["use chemistry key", "unlock lab"]
 meltChains = ["use acid", "melt chain", "use beaker of acid"]
 chickenDog = ["toss chicken wing", "use chicken wing", "distract dog"]
 talkTo = ["talk", "talk to them", "speak", "speak with"]
-fight = ["fight", "attack", "take exam"]
 keyPad = ["use keypad", "keypad", "enter code"]
+useInvite = ["give invite", "use invite", "throw invite"]
 
 action_aliases = {"jump_out_window": jumpOutWindow,
                  "open window": openWindow,
@@ -96,9 +96,9 @@ action_aliases = {"jump_out_window": jumpOutWindow,
                  "acid": meltChains,
                  "chicken": chickenDog,
                  "talk": talkTo,
-                 "fight": fight,
                  "use_ckey": chemKey,
-                 "keypad": keyPad
+                 "keypad": keyPad,
+                 "invite": useInvite
                  }
 
 # Instrtion Variable
@@ -115,12 +115,16 @@ instructions = """
         """
 
 help = """
----------Helpful Commands---------
-- Make sure to inspect halls with <inspect>!!!
-- Directional Commands: north, south, west, east, up, down
-- Special Commands: exit, enter, back, backpack
-- Actions: use <item name>, talk, grab <item name>
-- In order to leave the game just type leave game.
+                ----------HELP---------
+- inspect    >  inspects current room or hall
+- n/s/e/w    >  moves around to different rooms and halls
+- u/d        >  moves up or down stairs when available
+- grab       >  adds item or object to your backpack
+- use        >  uses item stored in backpack
+- backpack   >  view the contents of your backpack
+- talk       >  interacts with people in rooms
+- leave game >  exits the game
+
 """
 
 # Functions
@@ -148,6 +152,7 @@ def invalid_input(user_input, exit_take, action_take):
 
 # Function for backpack
 def display_backpack():
+    print("--------------------")
     print("---- Backpack ----")
     for item in state.backpack:
         print(item["name"])
@@ -214,13 +219,13 @@ def handle_location(location_name):
 # Main Game Loop
 def game_loop(state):
     print("--------------------")
-    state.gprint("Remmber your goal is to break into Proffesor Buck's office and steal the final exam.")
+    state.gprint("Remember your goal is to break into Proffesor Buck's office and steal the final exam.")
     while True:
         handle_location(state.location)
 
 #Start Menu
 def menu(state):
-        print("""
+    print("""
 ▀█████████▄  ███    █▄   ▄█        ▄█       ████████▄   ▄██████▄     ▄██████▄  
   ███    ███ ███    ███ ███       ███       ███   ▀███ ███    ███   ███    ███ 
   ███    ███ ███    ███ ███       ███       ███    ███ ███    ███   ███    █▀  
@@ -241,11 +246,10 @@ def menu(state):
                        ███    ███                          ▀                           
 """)
     
-    state.gprint("""
----------WELCOME TO BULLDOG BRAWl---------
-    1. Play game
+    state.gprint("""\033[1m
+    1. Play Game
     2. Instructions
-    3. Exit""")
+    3. Exit\033[0;0m""")
     choice = state.uinput("> ")
     if choice =='1':
         game_loop(state)
