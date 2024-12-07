@@ -1134,7 +1134,7 @@ locations = {
     "marshallpacfl1": {
         "initialDescription": "***",
         "description": "You can tell the space you are in is intended for public viewing. It is clean and contains unique art. To the west is a hallway that leads to Montague Hall. Stairs lead up to access the upper level of the performance hall, but the doors are shut. Stairs also lead to the basement. A hallway takes you east to the engineering building.",
-        "exits": {"west": "montagueflgr", "down": "marshallpacbs", "up": "marshallpacfl2"},
+        "exits": {"west": "montaguegr", "down": "marshallpacbs", "up": "marshallpacfl2"},
         "actions": {}
     },
     "marshallpacfl2": {
