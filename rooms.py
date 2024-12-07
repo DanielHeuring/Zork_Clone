@@ -152,6 +152,7 @@ def unlock_office(state: GameState):
                 print("--------------------")
                 state.gprint("BEEP BEEP - CLICK")
                 state.gprint("The door is now unlocked")
+                state.location = 'soloncc'
                 locations['soloncc']['exits'].update(enter= "math_office")
                 break
             else:
