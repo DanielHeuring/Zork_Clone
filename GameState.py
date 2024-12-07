@@ -2,9 +2,9 @@ from time import sleep
 # This class is for functions and variables that handle the basic enviroment of the game
 class GameState:
     def __init__(self):
-        self.location = "heller3"
+        self.location = "dorm"
         self.prevLocation = 0
-        self.backpack = [{"name": "water bottle"}, {"name": "ceaser salad"}]
+        self.backpack = [{"name": "water bottle"}, {"name": "laptop"}]
 
     def gprint(self, string):
         string = string + "\n"
