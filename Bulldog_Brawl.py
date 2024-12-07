@@ -473,8 +473,8 @@ def drunk_guy(state: GameState):
 
 def get_food(state: GameState):
     print("--------------------")
-    state.gprint("Using the Ucard you bought <ceaser salad>.")
-    state.backpack.append({"name": "ceaser salad"})
+    state.gprint("Using the Ucard you bought <caesar salad>.")
+    state.backpack.append({"name": "caesar salad"})
     locations['heller3']['actions'].update(salad= give_food)
 
 def give_food(state: GameState):
@@ -1259,7 +1259,7 @@ talkTo = ["talk", "talk to them", "speak", "speak with"]
 keyPad = ["use keypad", "keypad", "enter code"]
 useInvite = ["give invite", "use invite", "throw invite"]
 useUcard = ["use ucard", "get food", "buy food"]
-giveSalad = ["use ceaser salad", "give ceaser salad", "give salad", "use salad"]
+giveSalad = ["use caesar salad", "give caesar salad", "give salad", "use salad"]
 
 action_aliases = {"jump_out_window": jumpOutWindow,
                  "open window": openWindow,
